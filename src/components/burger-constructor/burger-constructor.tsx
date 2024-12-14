@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
-import { TConstructorIngredient, TIngredient } from '../../utils/types';
-import { BurgerConstructorUI } from '../../components/ui';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { BurgerConstructorUI } from '@ui';
 import { useSelector } from '../../services/store';
 import { selectConstructorItems } from '../../services/slices/ingredientsSlice';
 
@@ -26,8 +26,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
-  // return null;
 
   return (
     <BurgerConstructorUI

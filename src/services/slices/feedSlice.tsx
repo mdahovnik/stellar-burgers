@@ -5,7 +5,7 @@ import {
   createSlice,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { TOrder, TOrdersData } from '@utils-types';
+import { TOrdersData } from '@utils-types';
 
 export interface IFeedState {
   isLoading: boolean;
@@ -33,7 +33,9 @@ const feedSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectFeed: (state) => state.ordersData
+    selectFeed: (state: IFeedState) => state.ordersData,
+    selectOrder: (state: IFeedState, number: string) =>
+      state.ordersData.orders.find((item) => item.number.toString() === number)
   },
   extraReducers: (builder: ActionReducerMapBuilder<IFeedState>) => {
     builder
@@ -55,5 +57,5 @@ const feedSlice = createSlice({
       );
   }
 });
-export const { selectFeed } = feedSlice.selectors;
+export const { selectFeed, selectOrder } = feedSlice.selectors;
 export default feedSlice.reducer;

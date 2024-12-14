@@ -12,7 +12,7 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader, IngredientDetails, Modal } from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
@@ -37,7 +37,7 @@ const App = () => {
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/ingredients' element={<IngredientDetails />} />
         <Route path='/profile'>
           <Route index element={<Profile />} />
           <Route path='orders' element={<ProfileOrders />} />
@@ -49,8 +49,26 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal onClose={() => {}} title={''}>
+              <Modal onClose={() => {}} title={'Детали ингредиента'}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal onClose={() => {}} title={''}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal onClose={() => {}} title={''}>
+                <OrderInfo />
               </Modal>
             }
           />
