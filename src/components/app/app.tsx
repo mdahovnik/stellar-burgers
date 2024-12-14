@@ -22,7 +22,7 @@ import { getFeeds } from '../../services/slices/feedSlice';
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const background = location.state?.background;
+  let state = location.state as { background?: Location };
   useEffect(() => {
     dispatch(getIngredients());
   }, []);
@@ -30,21 +30,23 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={state?.background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/ingredients' element={<IngredientDetails />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='/profile'>
           <Route index element={<Profile />} />
           <Route path='orders' element={<ProfileOrders />} />
         </Route>
+        <Route path='/profile/orders/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
-      {background && (
+      {state?.background && (
         <Routes>
           <Route
             path='/ingredients/:id'

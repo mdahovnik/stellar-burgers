@@ -4,8 +4,8 @@ import {
   createSlice,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '../../utils/burger-api';
-import { TConstructorIngredient, TIngredient } from '../../utils/types';
+import { getIngredientsApi } from '@api';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 export interface IIngredientsState {
   isLoading: boolean;

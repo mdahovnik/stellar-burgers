@@ -24,7 +24,7 @@ const initialState: IFeedState = {
 };
 
 export const getFeeds = createAsyncThunk(
-  'feed/getAll',
+  'feed/getFeed',
   async () => await getFeedsApi()
 );
 
