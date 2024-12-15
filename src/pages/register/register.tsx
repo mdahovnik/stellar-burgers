@@ -30,6 +30,7 @@ export const Register: FC = () => {
     />
   );
 };
+//TODO: убрать комментарий
 
 //  Maksim Dahovnik
 //  dahovnik@ayandex.ru

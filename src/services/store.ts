@@ -3,7 +3,7 @@ import ingredientReducer from '../services/slices/ingredientsSlice';
 import constructorReducer from '../services/slices/constructorSlice';
 import feedReducer from '../services/slices/feedSlice';
 import userReducer from '../services/slices/userSlice';
-
+//TODO: почистить
 import {
   TypedUseSelectorHook,
   useDispatch as dispatchHook,

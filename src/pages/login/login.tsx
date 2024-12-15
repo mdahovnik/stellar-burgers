@@ -9,7 +9,7 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const success = useSelector(selectLoginSuccess);
+  const isLoginSuccess = useSelector(selectLoginSuccess);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -18,8 +18,8 @@ export const Login: FC = () => {
   };
 
   useEffect(() => {
-    if (success) navigate('/');
-  }, [success]);
+    if (isLoginSuccess) navigate('/');
+  }, [isLoginSuccess]);
 
   return (
     <LoginUI
