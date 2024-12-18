@@ -8,13 +8,13 @@ import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 
 export interface IIngredientsState {
-  isLoading: boolean;
+  isIngredientsLoading: boolean;
   error: string | null | undefined;
   ingredients: TIngredient[];
 }
 
-export const initialState: IIngredientsState = {
-  isLoading: false,
+const initialState: IIngredientsState = {
+  isIngredientsLoading: false,
   error: null,
   ingredients: []
 };
@@ -25,11 +25,12 @@ export const getIngredients = createAsyncThunk(
 );
 
 const ingredientsSlice = createSlice({
-  name: 'burgerIngredients',
+  name: 'ingredientsData',
   initialState,
   reducers: {},
   selectors: {
-    selectIsIngredientsLoading: (state: IIngredientsState) => state.isLoading,
+    selectIsIngredientsLoading: (state: IIngredientsState) =>
+      state.isIngredientsLoading,
     selectIngredients: (state: IIngredientsState) => state.ingredients,
     selectIngredientData: (state: IIngredientsState, id: string) =>
       state.ingredients.find((item) => item._id === id)
@@ -37,23 +38,26 @@ const ingredientsSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<IIngredientsState>) => {
     builder
       .addCase(getIngredients.pending, (state: IIngredientsState) => {
-        state.isLoading = true;
+        state.isIngredientsLoading = true;
         state.error = null;
       })
       .addCase(getIngredients.rejected, (state: IIngredientsState, action) => {
-        state.isLoading = false;
+        state.isIngredientsLoading = false;
         state.error = action.error.message;
       })
       .addCase(
         getIngredients.fulfilled,
         (state: IIngredientsState, action: PayloadAction<TIngredient[]>) => {
           state.ingredients = action.payload;
-          state.isLoading = false;
+          state.isIngredientsLoading = false;
         }
       );
   }
 });
 
-export const { selectIngredients, selectIngredientData } =
-  ingredientsSlice.selectors;
+export const {
+  selectIngredients,
+  selectIngredientData,
+  selectIsIngredientsLoading
+} = ingredientsSlice.selectors;
 export default ingredientsSlice.reducer;

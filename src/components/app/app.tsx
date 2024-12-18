@@ -13,16 +13,72 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch } from '../../services/store';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
+import { ReactElement, useEffect } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { getFeeds } from '../../services/slices/feedSlice';
+import {
+  getUser,
+  selectIsAuthChecked,
+  selectUserCheckSuccess,
+  selectUser,
+  selectIsLoading
+} from '../../services/slices/userSlice';
+import { Preloader } from '@ui';
+
+type ProtectedRouteProps = {
+  onlyUnAuth?: boolean;
+  children: ReactElement;
+};
+
+export const ProtectedRoute = ({
+  onlyUnAuth = false,
+  children
+}: ProtectedRouteProps) => {
+  const isAuthChecked = useSelector(selectIsAuthChecked);
+  const isLoading = useSelector(selectIsLoading);
+  // const userChecked = useSelector(selectUserCheckSuccess);
+  const location = useLocation();
+  const user = useSelector(selectUser);
+
+  if (!isAuthChecked && isLoading) {
+    console.log('WAIT USER CHECKOUT');
+    return <Preloader />;
+  }
+
+  // если нахожусь на странице логина и есть пользователь
+  if (onlyUnAuth && user.email && user.name) {
+    const from = location.state.from || { pathname: '/' };
+    return <Navigate replace to={from} />;
+  }
+
+  if (!onlyUnAuth && (!user.email || !user.name))
+    return <Navigate to='/login' replace state={location.pathname} />;
+
+  return children;
+};
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const closeModal = () => {
+    navigate(-1);
+  };
+
   let state = location.state as { background?: Location };
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
   useEffect(() => {
     dispatch(getIngredients());
   }, []);
@@ -33,25 +89,85 @@ const App = () => {
       <Routes location={state?.background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
+        {/*<Route*/}
+        {/*  path='/profile'*/}
+        {/*  element={*/}
+        {/*    <ProtectedRoute>*/}
+        {/*      <Profile />*/}
+        {/*    </ProtectedRoute>*/}
+        {/*  }*/}
+        {/*/>*/}
+        {/*<Route*/}
+        {/*  path='/profile/orders'*/}
+        {/*  element={*/}
+        {/*    <ProtectedRoute>*/}
+        {/*      <ProfileOrders />*/}
+        {/*    </ProtectedRoute>*/}
+        {/*  }*/}
+        {/*/>*/}
+
         <Route path='/profile'>
-          <Route index element={<Profile />} />
-          <Route path='orders' element={<ProfileOrders />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='orders'
+            element={
+              <ProtectedRoute>
+                <ProfileOrders />
+              </ProtectedRoute>
+            }
+          />
         </Route>
         <Route path='/profile/orders/:number' element={<OrderInfo />} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
+
       {state?.background && (
         <Routes>
           <Route
             path='/ingredients/:id'
             element={
-              <Modal onClose={() => {}} title={'Детали ингредиента'}>
+              <Modal onClose={closeModal} title={'Детали ингредиента'}>
                 <IngredientDetails />
               </Modal>
             }
@@ -60,7 +176,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal onClose={() => {}} title={''}>
+              <Modal onClose={closeModal} title={'Детали заказа'}>
                 <OrderInfo />
               </Modal>
             }
@@ -69,7 +185,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal onClose={() => {}} title={''}>
+              <Modal onClose={closeModal} title={'Детали заказа'}>
                 <OrderInfo />
               </Modal>
             }
@@ -81,3 +197,5 @@ const App = () => {
 };
 
 export default App;
+
+// accessToken Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWRlMjA3NzUwODY0MDAxZDM3MTQ4NCIsImlhdCI6MTczNDM2NTk3NCwiZXhwIjoxNzM0MzY3MTc0fQ.Ng6Rhn4OxjEnmKTcFy3NDIDhWsmyG5kq2lKDOVCekdI

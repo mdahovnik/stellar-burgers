@@ -3,6 +3,8 @@ import ingredientReducer from '../services/slices/ingredientsSlice';
 import constructorReducer from '../services/slices/constructorSlice';
 import feedReducer from '../services/slices/feedSlice';
 import userReducer from '../services/slices/userSlice';
+import orderReducer from '../services/slices/orderSlice';
+
 //TODO: почистить
 import {
   TypedUseSelectorHook,
@@ -11,10 +13,11 @@ import {
 } from 'react-redux';
 
 const rootReducer = combineReducers({
-  burgerIngredients: ingredientReducer,
-  burgerConstructor: constructorReducer,
+  ingredientsData: ingredientReducer,
+  constructorData: constructorReducer,
   feed: feedReducer,
-  userData: userReducer
+  userData: userReducer,
+  orderData: orderReducer
 });
 
 // const rootReducer = combineReducers({

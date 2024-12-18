@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Preloader } from '@ui';
 import { IngredientDetailsUI } from '@ui';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from '../../services/store';
 import {
   IIngredientsState,
@@ -14,7 +14,6 @@ export const IngredientDetails: FC = () => {
   const ingredientData = useSelector((state) =>
     selectIngredientData(state, params.id!)
   );
-
   if (!ingredientData) {
     return <Preloader />;
   }

@@ -93,7 +93,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </Modal>
     )}
 
-    {orderModalData && (
+    {orderModalData?._id && (
       <Modal
         onClose={closeOrderModal}
         title={orderRequest ? 'Оформляем заказ...' : ''}

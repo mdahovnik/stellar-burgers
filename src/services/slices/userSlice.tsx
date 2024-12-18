@@ -2,29 +2,30 @@ import { TUser } from '@utils-types';
 import {
   ActionReducerMapBuilder,
   createAsyncThunk,
-  createSlice,
-  PayloadAction
+  createSlice
 } from '@reduxjs/toolkit';
-import { loginUserApi, registerUserApi, TRegisterData } from '@api';
+import { getUserApi, loginUserApi, registerUserApi, TRegisterData } from '@api';
 import { setCookie } from '../../utils/cookie';
 
 export interface IUserState {
   isAuthChecked: boolean; // флаг для статуса проверки токена пользователя
-  isAuthenticated: boolean; // если авторизовались то true
+  isAuthenticated: boolean; // если авторизовались то-true
   loginUserError: string | null | undefined;
   loginUserRequest: boolean;
-  loginSuccess: boolean;
-  loginData: TUser;
+  checkUserSuccess: boolean;
+  isLoading: boolean;
+  user: TUser;
   registerData: TRegisterData;
 }
 
 const initialState: IUserState = {
   isAuthChecked: false, // флаг для статуса проверки токена пользователя
-  isAuthenticated: false,
+  isAuthenticated: false, // если авторизовались то-true
   loginUserError: null,
   loginUserRequest: false,
-  loginSuccess: false,
-  loginData: {
+  checkUserSuccess: false,
+  isLoading: false,
+  user: {
     name: '',
     email: ''
   },
@@ -40,11 +41,16 @@ export const loginUser = createAsyncThunk(
   async ({ email, password }: Omit<TRegisterData, 'name'>) => {
     const data = await loginUserApi({ email, password });
     if (data?.success) {
-      setCookie('accessToken', data.accessToken);
+      localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
     }
     return data;
   }
+);
+
+export const getUser = createAsyncThunk(
+  'user/getUser',
+  async () => await getUserApi()
 );
 
 export const registerUser = createAsyncThunk(
@@ -58,8 +64,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectLoginSuccess: (state) => state.loginSuccess,
-    selectUserName: (state) => state.loginData.name
+    selectCheckUserSuccess: (state) => state.checkUserSuccess,
+    selectUserName: (state) => state.user.name,
+    selectIsAuthChecked: (state) => state.isAuthChecked,
+    selectUser: (state) => state.user,
+    selectIsLoading: (state) => state.isLoading,
+    selectIsAuthenticated: (state) => state.isAuthenticated
   },
   extraReducers: (builder: ActionReducerMapBuilder<IUserState>) => {
     builder
@@ -68,14 +78,15 @@ const userSlice = createSlice({
         state.loginUserError = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loginUserRequest = false;
+        // state.loginUserRequest = false;
+        state.isAuthChecked = false;
         state.loginUserError = action.error.message;
-        state.isAuthChecked = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.loginSuccess = action.payload.success;
-        state.loginData = action.payload.user;
+        // state.checkUserSuccess = action.payload.success;
+        state.user = action.payload.user;
         state.loginUserRequest = false;
+        state.loginUserError = null;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
@@ -91,9 +102,29 @@ const userSlice = createSlice({
         state.loginUserRequest = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
+      })
+      .addCase(getUser.pending, (state) => {
+        state.loginUserRequest = true;
+        state.loginUserError = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.checkUserSuccess = action.payload.success;
+        // state.isAuthenticated = true;
+        state.isAuthChecked = action.payload.success;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loginUserError = action.error.message;
       });
   }
 });
 
-export const { selectLoginSuccess, selectUserName } = userSlice.selectors;
+export const {
+  selectCheckUserSuccess: selectUserCheckSuccess,
+  selectUserName,
+  selectIsAuthChecked,
+  selectUser,
+  selectIsLoading,
+  selectIsAuthenticated
+} = userSlice.selectors;
 export default userSlice.reducer;

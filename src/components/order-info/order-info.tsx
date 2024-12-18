@@ -1,28 +1,35 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useLayoutEffect, useMemo } from 'react';
 import { Preloader } from '@ui';
 import { OrderInfoUI } from '@ui';
 import { TIngredient, TOrder } from '@utils-types';
-import { useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/slices/ingredientsSlice';
 import { selectOrder } from '../../services/slices/feedSlice';
 import { useParams } from 'react-router-dom';
+import {
+  clearOrderByNumber,
+  getOrderByNumber,
+  selectOrderByNumber
+} from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
+  const dispatch = useDispatch();
   const params = useParams();
-  const ingredientsData = useSelector(selectIngredients);
-  const orderData = useSelector((state) => selectOrder(state, params.number!));
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
+  const orderByNumberData = useSelector(selectOrderByNumber);
+  // const ingredientsData = useSelector(selectIngredients);
 
-  const ingredients: TIngredient[] = ingredientsData; //[];
+  const ingredients: TIngredient[] = useSelector(selectIngredients); //[];
+  let orderData = orderByNumberData[0];
+
+  useEffect(() => {
+    dispatch(getOrderByNumber(Number(params.number!)));
+    return () => {
+      dispatch(clearOrderByNumber());
+    };
+  }, []);
+
+  // const orderData = useSelector((state) => selectOrder(state, params.number!));
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

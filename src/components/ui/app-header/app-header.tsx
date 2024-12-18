@@ -9,10 +9,9 @@ import {
 } from '@zlden/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 
-//TODO: Доделать ссылки
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
   const setActive = ({ isActive }: { isActive: boolean }) =>
-    isActive ? styles.link_active : styles.link;
+    isActive ? `${styles.link} ${styles.link_active}` : styles.link;
 
   return (
     <header className={styles.header}>
@@ -45,7 +44,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
         </div>
 
         <div className={styles.link_position_last}>
-          <NavLink to='/login' className={setActive}>
+          <NavLink to='/profile' className={setActive}>
             {({ isActive }) => (
               <>
                 <ProfileIcon type={isActive ? 'primary' : 'secondary'} />

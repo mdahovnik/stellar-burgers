@@ -2,21 +2,21 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 export interface IConstructorState {
-  constructorItems: {
+  burger: {
     bun: TIngredient | undefined;
     ingredients: TConstructorIngredient[];
   };
 }
 
-export const initialState: IConstructorState = {
-  constructorItems: {
+const initialState: IConstructorState = {
+  burger: {
     bun: undefined,
     ingredients: []
   }
 };
 
 const constructorSlice = createSlice({
-  name: 'burgerConstructor',
+  name: 'constructorData',
   initialState,
   reducers: {
     addIngredient: (
@@ -24,23 +24,32 @@ const constructorSlice = createSlice({
       action: PayloadAction<TConstructorIngredient>
     ) => {
       if (action.payload.type === 'bun') {
-        state.constructorItems.bun = action.payload;
+        state.burger.bun = action.payload;
       } else {
-        state.constructorItems.ingredients.push(action.payload);
+        state.burger.ingredients.push(action.payload);
       }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
-      state.constructorItems.ingredients =
-        state.constructorItems.ingredients.filter(
-          (item) => item.id !== action.payload
-        );
+      state.burger.ingredients = state.burger.ingredients.filter(
+        (item) => item.id !== action.payload
+      );
+    },
+    reorderIngredients: (
+      state,
+      { payload }: PayloadAction<{ from: number; to: number }>
+    ) => {
+      const { from, to } = payload;
+      const ingredients = [...state.burger.ingredients];
+      ingredients.splice(to, 0, ingredients.splice(from, 1)[0]);
+      state.burger.ingredients = ingredients;
     }
   },
   selectors: {
-    selectConstructorItems: (state: IConstructorState) => state.constructorItems
+    selectConstructorItems: (state: IConstructorState) => state.burger
   }
 });
 
 export const { selectConstructorItems } = constructorSlice.selectors;
-export const { addIngredient, removeIngredient } = constructorSlice.actions;
+export const { addIngredient, removeIngredient, reorderIngredients } =
+  constructorSlice.actions;
 export default constructorSlice.reducer;

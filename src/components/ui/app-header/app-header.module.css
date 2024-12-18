@@ -10,10 +10,9 @@
     margin: 0 auto;
 }
 
-/*TODO: почистить*/
 .menu_part_left {
     display: flex;
-    /*justify-content: flex-end;*/
+    justify-content: flex-end;
     flex-basis: 35%;
 }
 
@@ -24,13 +23,7 @@
 }
 
 .link_active {
-    display: flex;
-    text-decoration: none;
     color: var(--text-primary-color);
-}
-
-.link_not_active {
-    color: var(--text-inactive-color);
 }
 
 .link_position_last {

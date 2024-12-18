@@ -10,13 +10,13 @@ import { TOrdersData } from '@utils-types';
 export interface IFeedState {
   isLoading: boolean;
   error: string | null | undefined;
-  ordersData: TOrdersData;
+  data: TOrdersData;
 }
 
 const initialState: IFeedState = {
   isLoading: false,
   error: null,
-  ordersData: {
+  data: {
     orders: [],
     total: 0,
     totalToday: 0
@@ -24,18 +24,26 @@ const initialState: IFeedState = {
 };
 
 export const getFeeds = createAsyncThunk(
-  'feed/getFeed',
+  'feed/getFeeds',
   async () => await getFeedsApi()
 );
 
 const feedSlice = createSlice({
   name: 'feed',
   initialState,
-  reducers: {},
+  reducers: {
+    clearFeedData(state) {
+      state.data = {
+        orders: [],
+        total: 0,
+        totalToday: 0
+      };
+    }
+  },
   selectors: {
-    selectFeed: (state: IFeedState) => state.ordersData,
+    selectFeed: (state: IFeedState) => state.data,
     selectOrder: (state: IFeedState, number: string) =>
-      state.ordersData.orders.find((item) => item.number.toString() === number)
+      state.data.orders.find((item) => item.number.toString() === number)
   },
   extraReducers: (builder: ActionReducerMapBuilder<IFeedState>) => {
     builder
@@ -50,7 +58,7 @@ const feedSlice = createSlice({
       .addCase(
         getFeeds.fulfilled,
         (state, action: PayloadAction<TOrdersData>) => {
-          state.ordersData = action.payload;
+          state.data = action.payload;
           state.isLoading = false;
           state.error = null;
         }
@@ -58,4 +66,5 @@ const feedSlice = createSlice({
   }
 });
 export const { selectFeed, selectOrder } = feedSlice.selectors;
+export const { clearFeedData } = feedSlice.actions;
 export default feedSlice.reducer;
