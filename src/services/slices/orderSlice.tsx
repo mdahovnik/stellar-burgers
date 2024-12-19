@@ -10,28 +10,16 @@ import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
 export interface IOrderState {
   orderRequest: boolean;
   error: string | undefined | null;
-  // success: boolean;
   name: string;
-  order: TOrder;
-  ordersByNumber: TOrder[]; //TODO: переименовать переменную
+  orderData: TOrder | null; //TODO: переименовать переменную
   orders: TOrder[];
 }
 
 const initialState: IOrderState = {
   orderRequest: false,
   error: null,
-  // success: false,
   name: '',
-  order: {
-    _id: '',
-    status: '',
-    name: '',
-    createdAt: '',
-    updatedAt: '',
-    number: 0,
-    ingredients: []
-  },
-  ordersByNumber: [],
+  orderData: null,
   orders: []
 };
 
@@ -46,35 +34,23 @@ export const getOrders = createAsyncThunk(
 );
 
 export const getOrderByNumber = createAsyncThunk(
-  'order/getOrderByNumber',
+  'order/getOrder',
   async (number: number) => await getOrderByNumberApi(number)
 );
 
 //TODO: почистить
 const orderSlice = createSlice({
-  name: 'orderData',
+  name: 'order',
   initialState,
   reducers: {
-    clearOrderByNumber(state) {
-      state.ordersByNumber = [];
-    },
     clearOrderModalData(state) {
-      state.order = {
-        _id: '',
-        status: '',
-        name: '',
-        createdAt: '',
-        updatedAt: '',
-        number: 0,
-        ingredients: []
-      };
+      state.orderData = null;
     }
   },
   selectors: {
-    selectOrder: (state) => state.order,
     selectOrderRequest: (state) => state.orderRequest,
     selectOrders: (state) => state.orders,
-    selectOrderByNumber: (state) => state.ordersByNumber
+    selectOrderData: (state) => state.orderData
   },
   extraReducers: (builder: ActionReducerMapBuilder<IOrderState>) => {
     builder
@@ -87,22 +63,18 @@ const orderSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
-        state.order = action.payload.order;
-        // state.success = action.payload.success;
         state.name = action.payload.name;
+        state.orderData = action.payload.order;
         state.orderRequest = false;
       })
       .addCase(getOrders.pending, (state) => {
-        // state.orderRequest = true;
         state.error = null;
       })
       .addCase(getOrders.rejected, (state: IOrderState, action) => {
-        // state.orderRequest = false;
         state.error = action.error.message;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
-        // state.orderRequest = false;
       })
       .addCase(getOrderByNumber.pending, (state) => {
         state.orderRequest = true;
@@ -113,18 +85,17 @@ const orderSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.ordersByNumber = action.payload.orders;
+        state.orderData = action.payload.orders[0];
         state.orderRequest = false;
-        // state.success = action.payload.;
       });
   }
 });
 
 export const {
-  selectOrder,
+  // selectOrder,
   selectOrderRequest,
   selectOrders,
-  selectOrderByNumber
+  selectOrderData
 } = orderSlice.selectors;
-export const { clearOrderByNumber, clearOrderModalData } = orderSlice.actions;
+export const { clearOrderModalData } = orderSlice.actions;
 export default orderSlice.reducer;

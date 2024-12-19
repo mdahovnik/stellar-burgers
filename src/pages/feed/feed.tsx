@@ -11,6 +11,7 @@ import {
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getFeeds());
   }, []);
@@ -18,18 +19,14 @@ export const Feed: FC = () => {
   const feed = useSelector(selectFeed);
   /** TODO: взять переменную из стора */
   const orders: TOrder[] = feed.orders; //[];
+  const handleGetFeeds = () => {
+    dispatch(clearFeedData());
+    dispatch(getFeeds());
+  };
 
   if (!orders.length) {
     return <Preloader />;
   }
 
-  return (
-    <FeedUI
-      orders={orders}
-      handleGetFeeds={() => {
-        dispatch(clearFeedData());
-        dispatch(getFeeds());
-      }}
-    />
-  );
+  return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
 };

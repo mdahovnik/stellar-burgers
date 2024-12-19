@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { getUserApi, loginUserApi, registerUserApi, TRegisterData } from '@api';
 import { setCookie } from '../../utils/cookie';
-
+//TODO: почистить
 export interface IUserState {
   isAuthChecked: boolean; // флаг для статуса проверки токена пользователя
   isAuthenticated: boolean; // если авторизовались то-true
@@ -60,7 +60,7 @@ export const registerUser = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: 'userData',
+  name: 'user',
   initialState,
   reducers: {},
   selectors: {

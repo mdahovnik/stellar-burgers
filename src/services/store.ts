@@ -5,7 +5,6 @@ import feedReducer from '../services/slices/feedSlice';
 import userReducer from '../services/slices/userSlice';
 import orderReducer from '../services/slices/orderSlice';
 
-//TODO: почистить
 import {
   TypedUseSelectorHook,
   useDispatch as dispatchHook,
@@ -13,18 +12,13 @@ import {
 } from 'react-redux';
 
 const rootReducer = combineReducers({
-  ingredientsData: ingredientReducer,
-  constructorData: constructorReducer,
+  ingredients: ingredientReducer,
+  burger: constructorReducer,
   feed: feedReducer,
-  userData: userReducer,
-  orderData: orderReducer
+  user: userReducer,
+  order: orderReducer
 });
 
-// const rootReducer = combineReducers({
-//   reducer: {
-//     ingredients: ingredientReducer
-//   }
-// });
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production'

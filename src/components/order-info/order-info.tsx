@@ -7,29 +7,26 @@ import { selectIngredients } from '../../services/slices/ingredientsSlice';
 import { selectOrder } from '../../services/slices/feedSlice';
 import { useParams } from 'react-router-dom';
 import {
-  clearOrderByNumber,
+  clearOrderModalData,
   getOrderByNumber,
-  selectOrderByNumber
+  selectOrderData
 } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const dispatch = useDispatch();
   const params = useParams();
-  const orderByNumberData = useSelector(selectOrderByNumber);
-  // const ingredientsData = useSelector(selectIngredients);
-
   const ingredients: TIngredient[] = useSelector(selectIngredients); //[];
-  let orderData = orderByNumberData[0];
 
   useEffect(() => {
     dispatch(getOrderByNumber(Number(params.number!)));
     return () => {
-      dispatch(clearOrderByNumber());
+      dispatch(clearOrderModalData());
     };
   }, []);
 
-  // const orderData = useSelector((state) => selectOrder(state, params.number!));
+  // const orderByNumberData = useSelector(selectOrderData);
+  const orderData = useSelector(selectOrderData); //orderByNumberData[0];
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

@@ -16,7 +16,7 @@ const initialState: IConstructorState = {
 };
 
 const constructorSlice = createSlice({
-  name: 'constructorData',
+  name: 'burger',
   initialState,
   reducers: {
     addIngredient: (
@@ -42,6 +42,12 @@ const constructorSlice = createSlice({
       const ingredients = [...state.burger.ingredients];
       ingredients.splice(to, 0, ingredients.splice(from, 1)[0]);
       state.burger.ingredients = ingredients;
+    },
+    clearConstructorData: (state) => {
+      state.burger = {
+        bun: undefined,
+        ingredients: []
+      };
     }
   },
   selectors: {
@@ -50,6 +56,10 @@ const constructorSlice = createSlice({
 });
 
 export const { selectConstructorItems } = constructorSlice.selectors;
-export const { addIngredient, removeIngredient, reorderIngredients } =
-  constructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  reorderIngredients,
+  clearConstructorData
+} = constructorSlice.actions;
 export default constructorSlice.reducer;
