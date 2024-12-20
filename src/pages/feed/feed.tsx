@@ -20,8 +20,7 @@ export const Feed: FC = () => {
   }, []);
 
   const feed = useSelector(selectFeed);
-  /** TODO: взять переменную из стора */
-  const orders: TOrder[] = feed.orders; //[];
+  const orders: TOrder[] = feed.orders;
   const handleGetFeeds = () => {
     dispatch(clearFeed());
     dispatch(getFeed());

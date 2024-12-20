@@ -12,27 +12,20 @@ import {
   TRegisterData,
   updateUserApi
 } from '@api';
-import { setCookie } from '../../utils/cookie';
-import { useDispatch } from '../store';
 
-//TODO: почистить
 export interface IUserState {
-  isAuthChecked: boolean; // флаг для статуса проверки токена пользователя
-  isAuthenticated: boolean; // если авторизовались то-true
-  loginUserError: string | null | undefined;
-  // loginUserRequest: boolean;
-  // checkUserSuccess: boolean;
+  isAuthChecked: boolean;
+  isAuthenticated: boolean;
+  error: string | null | undefined;
   isLoading: boolean;
   user: TUser | null;
   registerData: TRegisterData;
 }
 
 const initialState: IUserState = {
-  isAuthChecked: true, // флаг для статуса проверки токена пользователя
-  isAuthenticated: false, // если авторизовались то-true
-  loginUserError: null,
-  // loginUserRequest: false,
-  // checkUserSuccess: false,
+  isAuthChecked: true,
+  isAuthenticated: false,
+  error: null,
   isLoading: false,
   user: null,
   registerData: {
@@ -97,49 +90,48 @@ const userSlice = createSlice({
     }
   },
   selectors: {
-    // selectCheckUserSuccess: (state) => state.checkUserSuccess,
-    // selectUserName: (state) => state.user.name,
     selectIsAuthChecked: (state) => state.isAuthChecked,
     selectIsAuthenticated: (state) => state.isAuthenticated,
     selectUser: (state) => state.user,
     selectIsLoading: (state) => state.isLoading,
-    selectUserLoginError: (state) => state.loginUserError
+    selectUserLoginError: (state) => state.error
   },
   extraReducers: (builder: ActionReducerMapBuilder<IUserState>) => {
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
-        state.loginUserError = null;
+        state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isAuthChecked = true;
-        state.loginUserError = action.error.message;
+        state.error = action.error.message;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isLoading = false;
-        state.loginUserError = null;
+        state.error = null;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
-        state.loginUserError = null;
+        state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.loginUserError = action.error.message;
+        state.error = action.error.message;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
+        state.isAuthenticated = true;
         state.isLoading = false;
         state.user = action.payload;
       })
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
-        state.loginUserError = null;
+        state.error = null;
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.loginUserError = action.error.message;
+        state.error = action.error.message;
         state.isLoading = false;
       })
       .addCase(getUser.fulfilled, (state, action) => {
@@ -154,10 +146,10 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
-        state.loginUserError = null;
+        state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.loginUserError = action.error.message;
+        state.error = action.error.message;
         state.isLoading = false;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
@@ -170,11 +162,8 @@ const userSlice = createSlice({
 });
 
 export const {
-  // selectCheckUserSuccess,
-  // selectUserName,
   selectIsAuthChecked,
   selectUser,
-  selectIsLoading,
   selectIsAuthenticated,
   selectUserLoginError
 } = userSlice.selectors;

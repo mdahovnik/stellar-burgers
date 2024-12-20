@@ -1,6 +1,5 @@
-import { setCookie, getCookie } from './cookie';
-import { TIngredient, TOrder, TOrdersData, TUser } from './types';
-//TODO: решить по cookie
+import { TIngredient, TOrder, TUser } from './types';
+
 const URL = process.env.BURGER_API_URL;
 
 const checkResponse = <T>(res: Response): Promise<T> =>
@@ -31,7 +30,7 @@ export const refreshToken = (): Promise<TRefreshResponse> =>
         return Promise.reject(refreshData);
       }
       localStorage.setItem('refreshToken', refreshData.refreshToken);
-      localStorage.setItem('accessToken', refreshData.accessToken); //setCookie('accessToken', refreshData.accessToken);
+      localStorage.setItem('accessToken', refreshData.accessToken);
       return refreshData;
     });
 
@@ -92,7 +91,7 @@ export const getOrdersApi = () =>
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: localStorage.getItem('accessToken') //getCookie('accessToken')
+      authorization: localStorage.getItem('accessToken')
     } as HeadersInit
   }).then((data) => {
     if (data?.success) return data.orders;
@@ -109,7 +108,7 @@ export const orderBurgerApi = (data: string[]) =>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: localStorage.getItem('accessToken') //getCookie('accessToken')
+      authorization: localStorage.getItem('accessToken')
     } as HeadersInit,
     body: JSON.stringify({
       ingredients: data
@@ -209,7 +208,7 @@ type TUserResponse = TServerResponse<{ user: TUser }>;
 export const getUserApi = () =>
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
     headers: {
-      authorization: localStorage.getItem('accessToken') //getCookie('accessToken')
+      authorization: localStorage.getItem('accessToken')
     } as HeadersInit
   });
 
@@ -218,7 +217,7 @@ export const updateUserApi = (user: Partial<TRegisterData>) =>
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: localStorage.getItem('accessToken') //getCookie('accessToken')
+      authorization: localStorage.getItem('accessToken')
     } as HeadersInit,
     body: JSON.stringify(user)
   });

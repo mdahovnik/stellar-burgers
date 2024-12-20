@@ -13,8 +13,7 @@ export const Register: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const data = dispatch(registerUser({ name: userName, email, password }));
-    console.log(data);
+    dispatch(registerUser({ name: userName, email, password }));
   };
 
   return (
@@ -30,9 +29,3 @@ export const Register: FC = () => {
     />
   );
 };
-
-//TODO: убрать комментарий
-
-//  Maksim Dahovnik
-//  dahovnik@ayandex.ru
-//  87654321
