@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   loginUser,
   selectIsAuthenticated,
-  selectUserCheckSuccess
+  selectUserLoginError
+  // selectUserCheckSuccess
 } from '../../services/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +15,7 @@ export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const error = useSelector(selectUserLoginError) ?? '';
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ export const Login: FC = () => {
 
   return (
     <LoginUI
-      errorText=''
+      errorText={error}
       email={email}
       setEmail={setEmail}
       password={password}

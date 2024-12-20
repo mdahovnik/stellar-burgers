@@ -1,14 +1,19 @@
-import { FC, useEffect, useLayoutEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '@ui';
 import { OrderInfoUI } from '@ui';
 import { TIngredient, TOrder } from '@utils-types';
-import { useDispatch, useSelector } from '../../services/store';
+import store, {
+  RootState,
+  useDispatch,
+  useSelector
+} from '../../services/store';
 import { selectIngredients } from '../../services/slices/ingredientsSlice';
 import { selectOrder } from '../../services/slices/feedSlice';
 import { useParams } from 'react-router-dom';
 import {
   clearOrderModalData,
   getOrderByNumber,
+  getOrderDataSelector,
   selectOrderData
 } from '../../services/slices/orderSlice';
 
@@ -16,17 +21,14 @@ export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const dispatch = useDispatch();
   const params = useParams();
+  const number = params.number!;
   const ingredients: TIngredient[] = useSelector(selectIngredients); //[];
 
-  useEffect(() => {
-    dispatch(getOrderByNumber(Number(params.number!)));
-    return () => {
-      dispatch(clearOrderModalData());
-    };
-  }, []);
+  const orderData = useSelector(getOrderDataSelector(number));
 
-  // const orderByNumberData = useSelector(selectOrderData);
-  const orderData = useSelector(selectOrderData); //orderByNumberData[0];
+  useEffect(() => {
+    if (!orderData) dispatch(getOrderByNumber(Number(number)));
+  }, [orderData, number]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

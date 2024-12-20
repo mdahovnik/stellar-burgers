@@ -6,12 +6,13 @@ import {
 } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import { RootState } from '../store';
 
 export interface IOrderState {
   orderRequest: boolean;
   error: string | undefined | null;
   name: string;
-  orderData: TOrder | null; //TODO: переименовать переменную
+  orderData: TOrder | null;
   orders: TOrder[];
 }
 
@@ -45,6 +46,9 @@ const orderSlice = createSlice({
   reducers: {
     clearOrderModalData(state) {
       state.orderData = null;
+    },
+    clearOrders(state) {
+      state.orders = [];
     }
   },
   selectors: {
@@ -91,11 +95,29 @@ const orderSlice = createSlice({
   }
 });
 
-export const {
-  // selectOrder,
-  selectOrderRequest,
-  selectOrders,
-  selectOrderData
-} = orderSlice.selectors;
-export const { clearOrderModalData } = orderSlice.actions;
+export const getOrderDataSelector = (number: string) => (state: RootState) => {
+  if (state.order.orders.length) {
+    const data = state.order.orders.find(
+      (item) => item.number === Number(number)
+    );
+    if (data) return data;
+  }
+
+  if (state.feed.data.orders.length) {
+    const data = state.feed.data.orders.find(
+      (item) => item.number === Number(number)
+    );
+    if (data) return data;
+  }
+
+  if (state.order.orderData?.number === Number(number)) {
+    return state.order.orderData;
+  }
+
+  return null;
+};
+
+export const { selectOrderRequest, selectOrders, selectOrderData } =
+  orderSlice.selectors;
+export const { clearOrderModalData, clearOrders } = orderSlice.actions;
 export default orderSlice.reducer;

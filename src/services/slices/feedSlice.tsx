@@ -23,7 +23,7 @@ const initialState: IFeedState = {
   }
 };
 
-export const getFeeds = createAsyncThunk(
+export const getFeed = createAsyncThunk(
   'feed/getFeed',
   async () => await getFeedsApi()
 );
@@ -32,7 +32,7 @@ const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    clearFeedData(state) {
+    clearFeed(state) {
       state.data = {
         orders: [],
         total: 0,
@@ -47,16 +47,16 @@ const feedSlice = createSlice({
   },
   extraReducers: (builder: ActionReducerMapBuilder<IFeedState>) => {
     builder
-      .addCase(getFeeds.pending, (state) => {
+      .addCase(getFeed.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getFeeds.rejected, (state, action) => {
+      .addCase(getFeed.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
       .addCase(
-        getFeeds.fulfilled,
+        getFeed.fulfilled,
         (state, action: PayloadAction<TOrdersData>) => {
           state.data = action.payload;
           state.isLoading = false;
@@ -66,5 +66,5 @@ const feedSlice = createSlice({
   }
 });
 export const { selectFeed, selectOrder } = feedSlice.selectors;
-export const { clearFeedData } = feedSlice.actions;
+export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;

@@ -8,14 +8,14 @@ import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 
 export interface IIngredientsState {
-  isIngredientsLoading: boolean;
+  isLoading: boolean;
   error: string | null | undefined;
   ingredient: TIngredient | undefined;
   ingredients: TIngredient[];
 }
 
 const initialState: IIngredientsState = {
-  isIngredientsLoading: false,
+  isLoading: false,
   error: null,
   ingredient: undefined,
   ingredients: []
@@ -40,25 +40,25 @@ const ingredientsSlice = createSlice({
     }
   },
   selectors: {
-    selectIsIngredientsLoading: (state) => state.isIngredientsLoading,
+    selectIsIngredientsLoading: (state) => state.isLoading,
     selectIngredients: (state) => state.ingredients,
     selectIngredientData: (state) => state.ingredient
   },
   extraReducers: (builder: ActionReducerMapBuilder<IIngredientsState>) => {
     builder
       .addCase(getIngredients.pending, (state: IIngredientsState) => {
-        state.isIngredientsLoading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(getIngredients.rejected, (state: IIngredientsState, action) => {
-        state.isIngredientsLoading = false;
+        state.isLoading = false;
         state.error = action.error.message;
       })
       .addCase(
         getIngredients.fulfilled,
         (state: IIngredientsState, action: PayloadAction<TIngredient[]>) => {
           state.ingredients = action.payload;
-          state.isIngredientsLoading = false;
+          state.isLoading = false;
         }
       );
   }

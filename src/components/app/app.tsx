@@ -26,9 +26,7 @@ import { getIngredients } from '../../services/slices/ingredientsSlice';
 import {
   getUser,
   selectIsAuthChecked,
-  selectUserCheckSuccess,
-  selectUser,
-  selectIsLoading
+  selectUser
 } from '../../services/slices/userSlice';
 import { Preloader } from '@ui';
 
@@ -42,24 +40,22 @@ export const ProtectedRoute = ({
   children
 }: ProtectedRouteProps) => {
   const isAuthChecked = useSelector(selectIsAuthChecked);
-  const isLoading = useSelector(selectIsLoading);
-  // const userChecked = useSelector(selectUserCheckSuccess);
   const location = useLocation();
   const user = useSelector(selectUser);
 
-  if (!isAuthChecked && isLoading) {
+  if (!isAuthChecked) {
     console.log('WAIT USER CHECKOUT');
     return <Preloader />;
   }
 
   // если нахожусь на странице логина и есть пользователь
-  if (onlyUnAuth && user.email && user.name) {
-    const from = location.state.from || { pathname: '/' };
+  if (onlyUnAuth && user) {
+    const from = location.state?.from || { pathname: '/' };
     return <Navigate replace to={from} />;
   }
 
-  if (!onlyUnAuth && (!user.email || !user.name))
-    return <Navigate to='/login' replace state={location.pathname} />;
+  if (!onlyUnAuth && !user)
+    return <Navigate to='/login' replace state={location.pathname} />; //location.pathname{ from: location }
 
   return children;
 };
@@ -73,20 +69,18 @@ const App = () => {
     navigate(-1);
   };
 
-  let state = location.state as { background?: Location };
+  // let state = location.state as { background?: Location };
+  const backgroundLocation = location.state?.background;
 
   useEffect(() => {
     dispatch(getUser());
-  }, []);
-
-  useEffect(() => {
     dispatch(getIngredients());
   }, []);
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={state?.background || location}>
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
@@ -145,7 +139,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -153,7 +147,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -162,7 +156,7 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {state?.background && (
+      {backgroundLocation && (
         <Routes>
           <Route
             path='/ingredients/:id'
@@ -185,9 +179,11 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
+              // <ProtectedRoute>
               <Modal onClose={closeModal} title={'Детали заказа'}>
                 <OrderInfo />
               </Modal>
+              // </ProtectedRoute>
             }
           />
         </Routes>

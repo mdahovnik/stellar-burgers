@@ -4,8 +4,8 @@ import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  clearFeedData,
-  getFeeds,
+  clearFeed,
+  getFeed,
   selectFeed
 } from '../../services/slices/feedSlice';
 
@@ -13,15 +13,18 @@ export const Feed: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getFeeds());
+    dispatch(getFeed());
+    return () => {
+      dispatch(clearFeed());
+    };
   }, []);
 
   const feed = useSelector(selectFeed);
   /** TODO: взять переменную из стора */
   const orders: TOrder[] = feed.orders; //[];
   const handleGetFeeds = () => {
-    dispatch(clearFeedData());
-    dispatch(getFeeds());
+    dispatch(clearFeed());
+    dispatch(getFeed());
   };
 
   if (!orders.length) {
