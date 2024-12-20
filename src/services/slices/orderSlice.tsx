@@ -1,8 +1,7 @@
 import {
   ActionReducerMapBuilder,
   createAsyncThunk,
-  createSlice,
-  PayloadAction
+  createSlice
 } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
@@ -39,12 +38,11 @@ export const getOrderByNumber = createAsyncThunk(
   async (number: number) => await getOrderByNumberApi(number)
 );
 
-//TODO: почистить
 const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    clearOrderModalData(state) {
+    clearOrderData(state) {
       state.orderData = null;
     },
     clearOrders(state) {
@@ -95,7 +93,7 @@ const orderSlice = createSlice({
   }
 });
 
-export const getOrderDataSelector = (number: string) => (state: RootState) => {
+export const selectGetOrderData = (number: string) => (state: RootState) => {
   if (state.order.orders.length) {
     const data = state.order.orders.find(
       (item) => item.number === Number(number)
@@ -119,5 +117,5 @@ export const getOrderDataSelector = (number: string) => (state: RootState) => {
 
 export const { selectOrderRequest, selectOrders, selectOrderData } =
   orderSlice.selectors;
-export const { clearOrderModalData, clearOrders } = orderSlice.actions;
+export const { clearOrderData, clearOrders } = orderSlice.actions;
 export default orderSlice.reducer;

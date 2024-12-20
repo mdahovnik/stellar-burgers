@@ -1,7 +1,7 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { RootState, useDispatch, useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   clearConstructorData,
   selectConstructorItems
@@ -10,13 +10,10 @@ import {
   orderBurger,
   selectOrderData,
   selectOrderRequest,
-  clearOrderModalData
+  clearOrderData
 } from '../../services/slices/orderSlice';
-import { useNavigate, useParams } from 'react-router-dom';
-import {
-  selectIsAuthChecked,
-  selectIsAuthenticated
-} from '../../services/slices/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { selectIsAuthenticated } from '../../services/slices/userSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -37,7 +34,6 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(selectOrderRequest);
   const orderModalData = useSelector(selectOrderData);
 
-  //TODO: кнопка оформить заказ
   const onOrderClick = () => {
     if (!isAuthenticated) {
       navigate('/profile');
@@ -48,7 +44,7 @@ export const BurgerConstructor: FC = () => {
   };
 
   const closeOrderModal = () => {
-    dispatch(clearOrderModalData());
+    dispatch(clearOrderData());
     dispatch(clearConstructorData());
   };
 

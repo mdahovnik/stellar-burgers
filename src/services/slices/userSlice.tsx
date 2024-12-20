@@ -9,7 +9,8 @@ import {
   loginUserApi,
   logoutApi,
   registerUserApi,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { setCookie } from '../../utils/cookie';
 import { useDispatch } from '../store';
@@ -33,10 +34,7 @@ const initialState: IUserState = {
   // loginUserRequest: false,
   // checkUserSuccess: false,
   isLoading: false,
-  user: null, //{
-  //   name: '',
-  //   email: ''
-  // },
+  user: null,
   registerData: {
     email: '',
     name: '',
@@ -63,8 +61,12 @@ export const getUser = createAsyncThunk('user/getUser', async () => {
 
 export const registerUser = createAsyncThunk(
   'user/registerUser',
-  async ({ email, name, password }: TRegisterData) =>
-    await registerUserApi({ email, name, password })
+  async ({ email, name, password }: TRegisterData) => {
+    const data = await registerUserApi({ email, name, password });
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    return data.user;
+  }
 );
 
 export const logoutUser = createAsyncThunk(
@@ -74,6 +76,11 @@ export const logoutUser = createAsyncThunk(
       localStorage.clear();
       dispatch(logout());
     })
+);
+
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (data: TRegisterData) => await updateUserApi(data)
 );
 
 const userSlice = createSlice({
@@ -123,8 +130,9 @@ const userSlice = createSlice({
         state.loginUserError = action.error.message;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
+        state.isAuthChecked = true;
         state.isLoading = false;
-        state.user = action.payload.user;
+        state.user = action.payload;
       })
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
@@ -143,6 +151,20 @@ const userSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.isAuthChecked = true;
         state.user = null;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+        state.loginUserError = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loginUserError = action.error.message;
+        state.isLoading = false;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isAuthChecked = true;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.isLoading = false;
       });
   }
 });

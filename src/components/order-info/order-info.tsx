@@ -11,10 +11,8 @@ import { selectIngredients } from '../../services/slices/ingredientsSlice';
 import { selectOrder } from '../../services/slices/feedSlice';
 import { useParams } from 'react-router-dom';
 import {
-  clearOrderModalData,
   getOrderByNumber,
-  getOrderDataSelector,
-  selectOrderData
+  selectGetOrderData
 } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
@@ -24,7 +22,7 @@ export const OrderInfo: FC = () => {
   const number = params.number!;
   const ingredients: TIngredient[] = useSelector(selectIngredients); //[];
 
-  const orderData = useSelector(getOrderDataSelector(number));
+  const orderData = useSelector(selectGetOrderData(number));
 
   useEffect(() => {
     if (!orderData) dispatch(getOrderByNumber(Number(number)));

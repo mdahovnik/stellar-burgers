@@ -6,18 +6,17 @@ import {
 } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
+import { RootState } from '../store';
 
 export interface IIngredientsState {
   isLoading: boolean;
   error: string | null | undefined;
-  ingredient: TIngredient | undefined;
   ingredients: TIngredient[];
 }
 
 const initialState: IIngredientsState = {
   isLoading: false,
   error: null,
-  ingredient: undefined,
   ingredients: []
 };
 
@@ -29,20 +28,10 @@ export const getIngredients = createAsyncThunk(
 const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {
-    setIngredientById(state, action: PayloadAction<{ id: string }>) {
-      state.ingredient = state.ingredients.find(
-        (item) => item._id === action.payload.id
-      );
-    },
-    clearIngredientById(state) {
-      state.ingredient = undefined;
-    }
-  },
+  reducers: {},
   selectors: {
     selectIsIngredientsLoading: (state) => state.isLoading,
-    selectIngredients: (state) => state.ingredients,
-    selectIngredientData: (state) => state.ingredient
+    selectIngredients: (state) => state.ingredients
   },
   extraReducers: (builder: ActionReducerMapBuilder<IIngredientsState>) => {
     builder
@@ -64,13 +53,10 @@ const ingredientsSlice = createSlice({
   }
 });
 
-export const {
-  selectIngredients,
-  selectIngredientData,
-  selectIsIngredientsLoading
-} = ingredientsSlice.selectors;
+export const { selectIngredients, selectIsIngredientsLoading } =
+  ingredientsSlice.selectors;
 
-export const { setIngredientById, clearIngredientById } =
-  ingredientsSlice.actions;
+export const selectIngredientsById = (id: string) => (state: RootState) =>
+  state.ingredients.ingredients.find((item) => item._id === id);
 
 export default ingredientsSlice.reducer;

@@ -83,7 +83,7 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/feed/:number' element={<OrderInfo />} />
+
         {/*<Route*/}
         {/*  path='/profile'*/}
         {/*  element={*/}
@@ -119,7 +119,7 @@ const App = () => {
             }
           />
         </Route>
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+
         <Route
           path='/login'
           element={
@@ -152,7 +152,39 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали заказа
+              </p>
+              <OrderInfo />
+            </div>
+          }
+        />
+        <Route
+          path='/feed/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали заказа
+              </p>
+              <OrderInfo />
+            </div>
+          }
+        />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали ингредиента
+              </p>
+              <IngredientDetails />
+            </div>
+          }
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
@@ -179,11 +211,11 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              // <ProtectedRoute>
-              <Modal onClose={closeModal} title={'Детали заказа'}>
-                <OrderInfo />
-              </Modal>
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <Modal onClose={closeModal} title={'Детали заказа'}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>
@@ -193,5 +225,3 @@ const App = () => {
 };
 
 export default App;
-
-// accessToken Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWRlMjA3NzUwODY0MDAxZDM3MTQ4NCIsImlhdCI6MTczNDM2NTk3NCwiZXhwIjoxNzM0MzY3MTc0fQ.Ng6Rhn4OxjEnmKTcFy3NDIDhWsmyG5kq2lKDOVCekdI
