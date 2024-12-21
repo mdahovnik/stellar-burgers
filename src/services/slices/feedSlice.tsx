@@ -62,6 +62,6 @@ const feedSlice = createSlice({
       );
   }
 });
-export const { selectFeed, selectOrder } = feedSlice.selectors;
+export const { selectFeed } = feedSlice.selectors;
 export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;
