@@ -28,10 +28,7 @@ export const orderBurger = createAsyncThunk(
   async (data: string[]) => await orderBurgerApi(data)
 );
 
-export const getOrders = createAsyncThunk(
-  'orders/getOrders',
-  async () => await getOrdersApi()
-);
+export const getOrders = createAsyncThunk('orders/getOrders', getOrdersApi);
 
 export const getOrderByNumber = createAsyncThunk(
   'order/getOrder',

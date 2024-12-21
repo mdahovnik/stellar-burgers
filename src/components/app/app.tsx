@@ -11,54 +11,13 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate
-} from 'react-router-dom';
-import { ReactElement, useEffect } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import {
-  getUser,
-  selectIsAuthChecked,
-  selectUser
-} from '../../services/slices/userSlice';
-import { Preloader } from '@ui';
-
-type ProtectedRouteProps = {
-  onlyUnAuth?: boolean;
-  children: ReactElement;
-};
-
-export const ProtectedRoute = ({
-  onlyUnAuth = false,
-  children
-}: ProtectedRouteProps) => {
-  const isAuthChecked = useSelector(selectIsAuthChecked);
-  const location = useLocation();
-  const user = useSelector(selectUser);
-
-  if (!isAuthChecked) {
-    console.log('WAIT USER CHECKOUT');
-    return <Preloader />;
-  }
-
-  // если нахожусь на странице логина и есть пользователь
-  if (onlyUnAuth && user) {
-    const from = location.state?.from || { pathname: '/' };
-    return <Navigate replace to={from} />;
-  }
-
-  if (!onlyUnAuth && !user)
-    return <Navigate to='/login' replace state={location.pathname} />; //location.pathname{ from: location }
-
-  return children;
-};
+import { getUser } from '../../services/slices/userSlice';
+import { ProtectedRoute } from '../../protectedRoute';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -69,7 +28,6 @@ const App = () => {
     navigate(-1);
   };
 
-  // let state = location.state as { background?: Location };
   const backgroundLocation = location.state?.background;
 
   useEffect(() => {
@@ -83,24 +41,6 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-
-        {/*<Route*/}
-        {/*  path='/profile'*/}
-        {/*  element={*/}
-        {/*    <ProtectedRoute>*/}
-        {/*      <Profile />*/}
-        {/*    </ProtectedRoute>*/}
-        {/*  }*/}
-        {/*/>*/}
-        {/*<Route*/}
-        {/*  path='/profile/orders'*/}
-        {/*  element={*/}
-        {/*    <ProtectedRoute>*/}
-        {/*      <ProfileOrders />*/}
-        {/*    </ProtectedRoute>*/}
-        {/*  }*/}
-        {/*/>*/}
-
         <Route path='/profile'>
           <Route
             index
@@ -119,7 +59,6 @@ const App = () => {
             }
           />
         </Route>
-
         <Route
           path='/login'
           element={
@@ -198,7 +137,6 @@ const App = () => {
               </Modal>
             }
           />
-
           <Route
             path='/feed/:number'
             element={
@@ -207,12 +145,11 @@ const App = () => {
               </Modal>
             }
           />
-
           <Route
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal onClose={closeModal} title={'Детали заказа'}>
+                <Modal onClose={closeModal} title={''}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

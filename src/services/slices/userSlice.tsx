@@ -47,10 +47,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk('user/getUser', async () => {
-  const res = await getUserApi();
-  return res.user;
-});
+export const getUser = createAsyncThunk('user/getUser', getUserApi);
 
 export const registerUser = createAsyncThunk(
   'user/registerUser',
@@ -63,7 +60,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk(
-  'user/logout',
+  'user/logoutUser',
   async (_, { dispatch }) =>
     await logoutApi().then(() => {
       localStorage.clear();
@@ -137,7 +134,7 @@ const userSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.isAuthenticated = true;
-        state.user = action.payload;
+        state.user = action.payload.user;
         state.isLoading = false;
       })
       .addCase(logoutUser.fulfilled, (state) => {
