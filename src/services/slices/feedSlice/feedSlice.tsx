@@ -7,13 +7,13 @@ import {
 } from '@reduxjs/toolkit';
 import { TOrdersData } from '@utils-types';
 
-export interface IFeedState {
+export type TFeedState = {
   isLoading: boolean;
   error: string | null | undefined;
   data: TOrdersData;
-}
+};
 
-const initialState: IFeedState = {
+const initialState: TFeedState = {
   isLoading: false,
   error: null,
   data: {
@@ -38,11 +38,11 @@ const feedSlice = createSlice({
     }
   },
   selectors: {
-    selectFeed: (state: IFeedState) => state.data,
-    selectOrder: (state: IFeedState, number: string) =>
+    selectFeed: (state: TFeedState) => state.data,
+    selectOrder: (state: TFeedState, number: string) =>
       state.data.orders.find((item) => item.number.toString() === number)
   },
-  extraReducers: (builder: ActionReducerMapBuilder<IFeedState>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<TFeedState>) => {
     builder
       .addCase(getFeed.pending, (state) => {
         state.isLoading = true;

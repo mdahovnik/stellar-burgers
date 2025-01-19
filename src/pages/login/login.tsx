@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   loginUser,
   selectUserLoginError
-} from '../../services/slices/userSlice';
+} from '../../services/slices/userSlice/userSlice';
 
 export const Login: FC = () => {
   const dispatch = useDispatch();

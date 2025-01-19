@@ -6,7 +6,7 @@ import {
   clearOrders,
   getOrders,
   selectOrders
-} from '../../services/slices/orderSlice';
+} from '../../services/slices/orderSlice/orderSlice';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();

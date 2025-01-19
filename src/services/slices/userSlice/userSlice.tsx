@@ -13,16 +13,16 @@ import {
   updateUserApi
 } from '@api';
 
-export interface IUserState {
+export type TUserState = {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   error: string | null | undefined;
   isLoading: boolean;
   user: TUser | null;
   registerData: TRegisterData;
-}
+};
 
-const initialState: IUserState = {
+const initialState: TUserState = {
   isAuthChecked: true,
   isAuthenticated: false,
   error: null,
@@ -93,7 +93,7 @@ const userSlice = createSlice({
     selectIsLoading: (state) => state.isLoading,
     selectUserLoginError: (state) => state.error
   },
-  extraReducers: (builder: ActionReducerMapBuilder<IUserState>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<TUserState>) => {
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;

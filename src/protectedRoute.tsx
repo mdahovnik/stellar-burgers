@@ -1,5 +1,8 @@
 import { useSelector } from './services/store';
-import { selectIsAuthChecked, selectUser } from './services/slices/userSlice';
+import {
+  selectIsAuthChecked,
+  selectUser
+} from './services/slices/userSlice/userSlice';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '@ui';
 import { ReactElement } from 'react';

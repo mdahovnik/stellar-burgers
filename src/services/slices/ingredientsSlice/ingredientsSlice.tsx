@@ -6,15 +6,15 @@ import {
 } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
-export interface IIngredientsState {
+export type TIngredientsState = {
   isLoading: boolean;
   error: string | null | undefined;
   ingredients: TIngredient[];
-}
+};
 
-const initialState: IIngredientsState = {
+const initialState: TIngredientsState = {
   isLoading: false,
   error: null,
   ingredients: []
@@ -33,19 +33,19 @@ const ingredientsSlice = createSlice({
     selectIsIngredientsLoading: (state) => state.isLoading,
     selectIngredients: (state) => state.ingredients
   },
-  extraReducers: (builder: ActionReducerMapBuilder<IIngredientsState>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<TIngredientsState>) => {
     builder
-      .addCase(getIngredients.pending, (state: IIngredientsState) => {
+      .addCase(getIngredients.pending, (state: TIngredientsState) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getIngredients.rejected, (state: IIngredientsState, action) => {
+      .addCase(getIngredients.rejected, (state: TIngredientsState, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
       .addCase(
         getIngredients.fulfilled,
-        (state: IIngredientsState, action: PayloadAction<TIngredient[]>) => {
+        (state: TIngredientsState, action: PayloadAction<TIngredient[]>) => {
           state.ingredients = action.payload;
           state.isLoading = false;
         }

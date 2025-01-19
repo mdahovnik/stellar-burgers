@@ -5,17 +5,17 @@ import {
 } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
-export interface IOrderState {
+export type TOrderState = {
   orderRequest: boolean;
   error: string | undefined | null;
   name: string;
   orderData: TOrder | null;
   orders: TOrder[];
-}
+};
 
-const initialState: IOrderState = {
+const initialState: TOrderState = {
   orderRequest: false,
   error: null,
   name: '',
@@ -51,13 +51,13 @@ const orderSlice = createSlice({
     selectOrders: (state) => state.orders,
     selectOrderData: (state) => state.orderData
   },
-  extraReducers: (builder: ActionReducerMapBuilder<IOrderState>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<TOrderState>) => {
     builder
       .addCase(orderBurger.pending, (state) => {
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(orderBurger.rejected, (state: IOrderState, action) => {
+      .addCase(orderBurger.rejected, (state: TOrderState, action) => {
         state.orderRequest = false;
         state.error = action.error.message;
       })
@@ -69,7 +69,7 @@ const orderSlice = createSlice({
       .addCase(getOrders.pending, (state) => {
         state.error = null;
       })
-      .addCase(getOrders.rejected, (state: IOrderState, action) => {
+      .addCase(getOrders.rejected, (state: TOrderState, action) => {
         state.error = action.error.message;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
@@ -79,7 +79,7 @@ const orderSlice = createSlice({
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(getOrderByNumber.rejected, (state: IOrderState, action) => {
+      .addCase(getOrderByNumber.rejected, (state: TOrderState, action) => {
         state.orderRequest = false;
         state.error = action.error.message;
       })
