@@ -7,12 +7,7 @@ import {
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../../store';
-
-export type TIngredientsState = {
-  isLoading: boolean;
-  error: string | null | undefined;
-  ingredients: TIngredient[];
-};
+import { TIngredientsState } from './type';
 
 const initialState: TIngredientsState = {
   isLoading: false,
@@ -35,18 +30,18 @@ const ingredientsSlice = createSlice({
   },
   extraReducers: (builder: ActionReducerMapBuilder<TIngredientsState>) => {
     builder
-      .addCase(getIngredients.pending, (state: TIngredientsState) => {
+      .addCase(getIngredients.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getIngredients.rejected, (state: TIngredientsState, action) => {
+      .addCase(getIngredients.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.error = error.message;
       })
       .addCase(
         getIngredients.fulfilled,
-        (state: TIngredientsState, action: PayloadAction<TIngredient[]>) => {
-          state.ingredients = action.payload;
+        (state, { payload }: PayloadAction<TIngredient[]>) => {
+          state.ingredients = payload;
           state.isLoading = false;
         }
       );

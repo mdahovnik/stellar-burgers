@@ -6,21 +6,14 @@ import {
   PayloadAction
 } from '@reduxjs/toolkit';
 import { TOrdersData } from '@utils-types';
-
-export type TFeedState = {
-  isLoading: boolean;
-  error: string | null | undefined;
-  data: TOrdersData;
-};
+import { TFeedState } from './type';
 
 const initialState: TFeedState = {
   isLoading: false,
   error: null,
-  data: {
-    orders: [],
-    total: 0,
-    totalToday: 0
-  }
+  orders: [],
+  total: 0,
+  totalToday: 0
 };
 
 export const getFeed = createAsyncThunk('feed/getFeed', getFeedsApi);
@@ -29,18 +22,12 @@ const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    clearFeed(state) {
-      state.data = {
-        orders: [],
-        total: 0,
-        totalToday: 0
-      };
-    }
+    clearFeed: () => initialState
   },
   selectors: {
-    selectFeed: (state: TFeedState) => state.data,
+    selectFeed: (state: TFeedState) => state,
     selectOrder: (state: TFeedState, number: string) =>
-      state.data.orders.find((item) => item.number.toString() === number)
+      state.orders.find((item) => item.number.toString() === number)
   },
   extraReducers: (builder: ActionReducerMapBuilder<TFeedState>) => {
     builder
@@ -48,14 +35,16 @@ const feedSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getFeed.rejected, (state, action) => {
+      .addCase(getFeed.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.error = error.message;
       })
       .addCase(
         getFeed.fulfilled,
-        (state, action: PayloadAction<TOrdersData>) => {
-          state.data = action.payload;
+        (state, { payload }: PayloadAction<TOrdersData>) => {
+          state.orders = payload.orders;
+          state.total = payload.total;
+          state.totalToday = payload.totalToday;
           state.isLoading = false;
           state.error = null;
         }

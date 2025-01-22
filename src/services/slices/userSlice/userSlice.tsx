@@ -1,4 +1,3 @@
-import { TUser } from '@utils-types';
 import {
   ActionReducerMapBuilder,
   createAsyncThunk,
@@ -12,15 +11,7 @@ import {
   TRegisterData,
   updateUserApi
 } from '@api';
-
-export type TUserState = {
-  isAuthChecked: boolean;
-  isAuthenticated: boolean;
-  error: string | null | undefined;
-  isLoading: boolean;
-  user: TUser | null;
-  registerData: TRegisterData;
-};
+import { TUserState } from './type';
 
 const initialState: TUserState = {
   isAuthChecked: true,
@@ -61,10 +52,9 @@ export const registerUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
-  async (_, { dispatch }) =>
+  async () =>
     await logoutApi().then(() => {
       localStorage.clear();
-      dispatch(logout());
     })
 );
 
@@ -76,16 +66,7 @@ export const updateUser = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    logout: (state) => {
-      state.user = {
-        name: '',
-        email: ''
-      };
-      state.isAuthChecked = false;
-      state.isAuthenticated = false;
-    }
-  },
+  reducers: {},
   selectors: {
     selectIsAuthChecked: (state) => state.isAuthChecked,
     selectIsAuthenticated: (state) => state.isAuthenticated,
@@ -99,12 +80,12 @@ const userSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUser.rejected, (state, { error }) => {
         state.isAuthChecked = true;
-        state.error = action.error.message;
+        state.error = error.message;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+      .addCase(loginUser.fulfilled, (state, { payload }) => {
+        state.user = payload.user;
         state.isLoading = false;
         state.error = null;
         state.isAuthenticated = true;
@@ -117,43 +98,45 @@ const userSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.error = action.error.message;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.isAuthChecked = true;
         state.isAuthenticated = true;
         state.isLoading = false;
-        state.user = action.payload;
+        state.user = payload;
       })
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getUser.rejected, (state, action) => {
-        state.error = action.error.message;
+      .addCase(getUser.rejected, (state, { error }) => {
+        state.error = error.message;
         state.isLoading = false;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getUser.fulfilled, (state, { payload }) => {
         state.isAuthChecked = true;
         state.isAuthenticated = true;
-        state.user = action.payload.user;
         state.isLoading = false;
-      })
-      .addCase(logoutUser.fulfilled, (state) => {
-        state.isAuthChecked = true;
-        state.user = null;
+        state.error = null;
+        state.user = payload.user;
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.error = action.error.message;
+      .addCase(updateUser.rejected, (state, { error }) => {
+        state.error = error.message;
         state.isLoading = false;
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
         state.isAuthChecked = true;
         state.isAuthenticated = true;
-        state.user = action.payload.user;
+        state.user = payload.user;
         state.isLoading = false;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isAuthChecked = true;
+        state.isAuthenticated = false;
+        state.user = null;
       });
   }
 });
@@ -164,5 +147,5 @@ export const {
   selectIsAuthenticated,
   selectUserLoginError
 } = userSlice.selectors;
-export const { logout } = userSlice.actions;
+// export const { logout } = userSlice.actions;
 export default userSlice.reducer;

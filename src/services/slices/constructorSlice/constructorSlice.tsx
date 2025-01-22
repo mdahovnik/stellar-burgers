@@ -1,18 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
-
-export type TConstructorState = {
-  burger: {
-    bun: TIngredient | undefined;
-    ingredients: TConstructorIngredient[];
-  };
-};
+import { TConstructorState } from './type';
 
 const initialState: TConstructorState = {
-  burger: {
-    bun: undefined,
-    ingredients: []
-  }
+  bun: null,
+  ingredients: []
 };
 
 const constructorSlice = createSlice({
@@ -21,17 +13,17 @@ const constructorSlice = createSlice({
   reducers: {
     addIngredient: (
       state: TConstructorState,
-      action: PayloadAction<TConstructorIngredient>
+      { payload }: PayloadAction<TConstructorIngredient>
     ) => {
-      if (action.payload.type === 'bun') {
-        state.burger.bun = action.payload;
+      if (payload.type === 'bun') {
+        state.bun = payload;
       } else {
-        state.burger.ingredients.push(action.payload);
+        state.ingredients.push(payload);
       }
     },
-    removeIngredient: (state, action: PayloadAction<string>) => {
-      state.burger.ingredients = state.burger.ingredients.filter(
-        (item) => item.id !== action.payload
+    removeIngredient: (state, { payload }: PayloadAction<string>) => {
+      state.ingredients = state.ingredients.filter(
+        (item) => item.id !== payload
       );
     },
     reorderIngredients: (
@@ -39,19 +31,14 @@ const constructorSlice = createSlice({
       { payload }: PayloadAction<{ from: number; to: number }>
     ) => {
       const { from, to } = payload;
-      const ingredients = [...state.burger.ingredients];
+      const ingredients = [...state.ingredients];
       ingredients.splice(to, 0, ingredients.splice(from, 1)[0]);
-      state.burger.ingredients = ingredients;
+      state.ingredients = ingredients;
     },
-    clearConstructorData: (state) => {
-      state.burger = {
-        bun: undefined,
-        ingredients: []
-      };
-    }
+    clearConstructorData: () => initialState
   },
   selectors: {
-    selectConstructorItems: (state: TConstructorState) => state.burger
+    selectConstructorItems: (state: TConstructorState) => state
   }
 });
 

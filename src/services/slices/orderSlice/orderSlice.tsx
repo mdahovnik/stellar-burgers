@@ -3,17 +3,9 @@ import {
   createAsyncThunk,
   createSlice
 } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
 import { RootState } from '../../store';
-
-export type TOrderState = {
-  orderRequest: boolean;
-  error: string | undefined | null;
-  name: string;
-  orderData: TOrder | null;
-  orders: TOrder[];
-};
+import { TOrderState } from './type';
 
 const initialState: TOrderState = {
   orderRequest: false,
@@ -57,60 +49,58 @@ const orderSlice = createSlice({
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(orderBurger.rejected, (state: TOrderState, action) => {
+      .addCase(orderBurger.rejected, (state, { error }) => {
         state.orderRequest = false;
-        state.error = action.error.message;
+        state.error = error.message;
       })
-      .addCase(orderBurger.fulfilled, (state, action) => {
-        state.name = action.payload.name;
-        state.orderData = action.payload.order;
+      .addCase(orderBurger.fulfilled, (state, { payload }) => {
+        state.name = payload.name;
+        state.orderData = payload.order;
         state.orderRequest = false;
       })
       .addCase(getOrders.pending, (state) => {
         state.error = null;
       })
-      .addCase(getOrders.rejected, (state: TOrderState, action) => {
-        state.error = action.error.message;
+      .addCase(getOrders.rejected, (state, { error }) => {
+        state.error = error.message;
       })
-      .addCase(getOrders.fulfilled, (state, action) => {
-        state.orders = action.payload;
+      .addCase(getOrders.fulfilled, (state, { payload }) => {
+        state.orders = payload;
       })
       .addCase(getOrderByNumber.pending, (state) => {
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(getOrderByNumber.rejected, (state: TOrderState, action) => {
+      .addCase(getOrderByNumber.rejected, (state, { error }) => {
         state.orderRequest = false;
-        state.error = action.error.message;
+        state.error = error.message;
       })
-      .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.orderData = action.payload.orders[0];
+      .addCase(getOrderByNumber.fulfilled, (state, { payload }) => {
+        state.orderData = payload.orders[0];
         state.orderRequest = false;
       });
   }
 });
 
-export const selectGetOrderData = (number: string) => (state: RootState) => {
-  if (state.order.orders.length) {
-    const data = state.order.orders.find(
-      (item) => item.number === Number(number)
-    );
-    if (data) return data;
-  }
+export const selectGetOrderData =
+  (number: string) =>
+  ({ order, feed }: RootState) => {
+    if (order.orders.length) {
+      const data = order.orders.find((item) => item.number === Number(number));
+      if (data) return data;
+    }
 
-  if (state.feed.data.orders.length) {
-    const data = state.feed.data.orders.find(
-      (item) => item.number === Number(number)
-    );
-    if (data) return data;
-  }
+    if (feed.orders.length) {
+      const data = feed.orders.find((item) => item.number === Number(number));
+      if (data) return data;
+    }
 
-  if (state.order.orderData?.number === Number(number)) {
-    return state.order.orderData;
-  }
+    if (order.orderData?.number === Number(number)) {
+      return order.orderData;
+    }
 
-  return null;
-};
+    return null;
+  };
 
 export const { selectOrderRequest, selectOrders, selectOrderData } =
   orderSlice.selectors;
