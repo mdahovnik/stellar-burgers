@@ -7,7 +7,7 @@ import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
 import { RootState } from '../../store';
 import { TOrderState } from './type';
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderRequest: false,
   error: null,
   name: '',

@@ -9,7 +9,7 @@ import { TIngredient } from '@utils-types';
 import { RootState } from '../../store';
 import { TIngredientsState } from './type';
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   isLoading: false,
   error: null,
   ingredients: []

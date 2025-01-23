@@ -13,7 +13,7 @@ import {
 } from '@api';
 import { TUserState } from './type';
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: true,
   isAuthenticated: false,
   error: null,

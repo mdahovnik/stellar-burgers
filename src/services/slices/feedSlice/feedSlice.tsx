@@ -8,7 +8,7 @@ import {
 import { TOrdersData } from '@utils-types';
 import { TFeedState } from './type';
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
   isLoading: false,
   error: null,
   orders: [],
@@ -25,9 +25,7 @@ const feedSlice = createSlice({
     clearFeed: () => initialState
   },
   selectors: {
-    selectFeed: (state: TFeedState) => state,
-    selectOrder: (state: TFeedState, number: string) =>
-      state.orders.find((item) => item.number.toString() === number)
+    selectFeed: (state: TFeedState) => state
   },
   extraReducers: (builder: ActionReducerMapBuilder<TFeedState>) => {
     builder
@@ -51,6 +49,7 @@ const feedSlice = createSlice({
       );
   }
 });
+
 export const { selectFeed } = feedSlice.selectors;
 export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;

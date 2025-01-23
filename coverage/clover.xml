@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1737577323124" clover="3.2.0">
-  <project timestamp="1737577323124" name="All files">
-    <metrics statements="692" coveredstatements="527" conditionals="53" coveredconditionals="53" methods="42" coveredmethods="12" elements="787" coveredelements="592" complexity="0" loc="692" ncloc="692" packages="7" files="7" classes="7"/>
+<coverage generated="1737664737831" clover="3.2.0">
+  <project timestamp="1737664737831" name="All files">
+    <metrics statements="691" coveredstatements="526" conditionals="53" coveredconditionals="53" methods="41" coveredmethods="12" elements="785" coveredelements="591" complexity="0" loc="691" ncloc="691" packages="7" files="7" classes="7"/>
     <package name="services">
       <metrics statements="34" coveredstatements="34" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="store.ts" path="/home/maksimd/Projects/practicum/11_sprint/stellar-burgers/src/services/store.ts">
@@ -101,9 +101,9 @@
       </file>
     </package>
     <package name="services.slices.feedSlice">
-      <metrics statements="56" coveredstatements="56" conditionals="5" coveredconditionals="5" methods="4" coveredmethods="2"/>
+      <metrics statements="55" coveredstatements="55" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="2"/>
       <file name="feedSlice.tsx" path="/home/maksimd/Projects/practicum/11_sprint/stellar-burgers/src/services/slices/feedSlice/feedSlice.tsx">
-        <metrics statements="56" coveredstatements="56" conditionals="5" coveredconditionals="5" methods="4" coveredmethods="2"/>
+        <metrics statements="55" coveredstatements="55" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -133,33 +133,32 @@
         <line num="27" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="32" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="33" count="2" type="stmt"/>
-        <line num="34" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="35" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="37" count="2" type="stmt"/>
-        <line num="38" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
+        <line num="30" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
         <line num="41" count="2" type="stmt"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="44" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="42" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="50" count="1" type="stmt"/>
-        <line num="51" count="2" type="stmt"/>
-        <line num="52" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
         <line num="54" count="1" type="stmt"/>
         <line num="55" count="1" type="stmt"/>
-        <line num="56" count="1" type="stmt"/>
       </file>
     </package>
     <package name="services.slices.ingredientsSlice">
