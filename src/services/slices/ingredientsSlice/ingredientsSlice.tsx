@@ -1,24 +1,18 @@
 import {
   ActionReducerMapBuilder,
-  createAsyncThunk,
   createSlice,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../../store';
 import { TIngredientsState } from './type';
+import { getIngredients } from './ingredients-thunk';
 
 export const initialState: TIngredientsState = {
   isLoading: false,
   error: null,
   ingredients: []
 };
-
-export const getIngredients = createAsyncThunk(
-  'ingredients/getAll',
-  async () => await getIngredientsApi()
-);
 
 const ingredientsSlice = createSlice({
   name: 'ingredients',

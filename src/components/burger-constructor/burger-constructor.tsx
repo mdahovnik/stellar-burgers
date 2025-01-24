@@ -7,13 +7,13 @@ import {
   selectConstructorItems
 } from '../../services/slices/constructorSlice/constructorSlice';
 import {
-  orderBurger,
   selectOrderData,
   selectOrderRequest,
   clearOrderData
 } from '../../services/slices/orderSlice/orderSlice';
 import { useNavigate } from 'react-router-dom';
 import { selectIsAuthenticated } from '../../services/slices/userSlice/userSlice';
+import { orderBurger } from '../../services/slices/orderSlice/order-thunk';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();

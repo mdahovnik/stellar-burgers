@@ -1,12 +1,13 @@
 import { TUserState } from './type';
-import userReducer, {
+import userReducer from './userSlice';
+import { loginUserApi, TRegisterData } from '@api';
+import {
   getUser,
   loginUser,
   logoutUser,
   registerUser,
   updateUser
-} from './userSlice';
-import { TRegisterData } from '@api';
+} from './user-thunk';
 
 describe('userSlice test', () => {
   const error = new Error('test error');

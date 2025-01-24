@@ -1,12 +1,11 @@
-import { getFeedsApi } from '@api';
 import {
   ActionReducerMapBuilder,
-  createAsyncThunk,
   createSlice,
   PayloadAction
 } from '@reduxjs/toolkit';
 import { TOrdersData } from '@utils-types';
 import { TFeedState } from './type';
+import { getFeed } from './feed-thunk';
 
 export const initialState: TFeedState = {
   isLoading: false,
@@ -15,8 +14,6 @@ export const initialState: TFeedState = {
   total: 0,
   totalToday: 0
 };
-
-export const getFeed = createAsyncThunk('feed/getFeed', getFeedsApi);
 
 const feedSlice = createSlice({
   name: 'feed',

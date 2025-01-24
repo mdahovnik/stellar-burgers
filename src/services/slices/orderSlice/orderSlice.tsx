@@ -1,11 +1,7 @@
-import {
-  ActionReducerMapBuilder,
-  createAsyncThunk,
-  createSlice
-} from '@reduxjs/toolkit';
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 import { TOrderState } from './type';
+import { getOrderByNumber, getOrders, orderBurger } from './order-thunk';
 
 export const initialState: TOrderState = {
   orderRequest: false,
@@ -14,18 +10,6 @@ export const initialState: TOrderState = {
   orderData: null,
   orders: []
 };
-
-export const orderBurger = createAsyncThunk(
-  'order/getOrderBurger',
-  async (data: string[]) => await orderBurgerApi(data)
-);
-
-export const getOrders = createAsyncThunk('orders/getOrders', getOrdersApi);
-
-export const getOrderByNumber = createAsyncThunk(
-  'order/getOrder',
-  async (number: number) => await getOrderByNumberApi(number)
-);
 
 const orderSlice = createSlice({
   name: 'order',

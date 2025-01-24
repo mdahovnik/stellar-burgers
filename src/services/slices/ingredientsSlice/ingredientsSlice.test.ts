@@ -1,5 +1,5 @@
-import { getIngredients } from './ingredientsSlice';
 import ingredientsReducer from './ingredientsSlice';
+import { getIngredients } from './ingredients-thunk';
 
 describe('ingredientSlice test', () => {
   const initialState = {

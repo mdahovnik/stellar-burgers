@@ -2,9 +2,9 @@ import { ProfileOrdersUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
+import { getOrders } from '../../services/slices/orderSlice/order-thunk';
 import {
   clearOrders,
-  getOrders,
   selectOrders
 } from '../../services/slices/orderSlice/orderSlice';
 

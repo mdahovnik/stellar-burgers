@@ -1,6 +1,7 @@
-import feedReducer, { clearFeed, getFeed } from './feedSlice';
+import feedReducer, { clearFeed } from './feedSlice';
 import { TFeedState } from './type';
 import { TOrder } from '@utils-types';
+import { getFeed } from './feed-thunk';
 
 describe('feedSlice testing', () => {
   const initialState: TFeedState = {

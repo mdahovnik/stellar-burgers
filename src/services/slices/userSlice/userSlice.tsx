@@ -1,17 +1,12 @@
-import {
-  ActionReducerMapBuilder,
-  createAsyncThunk,
-  createSlice
-} from '@reduxjs/toolkit';
-import {
-  getUserApi,
-  loginUserApi,
-  logoutApi,
-  registerUserApi,
-  TRegisterData,
-  updateUserApi
-} from '@api';
+import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { TUserState } from './type';
+import {
+  getUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+  updateUser
+} from './user-thunk';
 
 export const initialState: TUserState = {
   isAuthChecked: true,
@@ -25,43 +20,6 @@ export const initialState: TUserState = {
     password: ''
   }
 };
-
-export const loginUser = createAsyncThunk(
-  'user/loginUser',
-  async ({ email, password }: Omit<TRegisterData, 'name'>) => {
-    const data = await loginUserApi({ email, password });
-    if (data?.success) {
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-    }
-    return data;
-  }
-);
-
-export const getUser = createAsyncThunk('user/getUser', getUserApi);
-
-export const registerUser = createAsyncThunk(
-  'user/registerUser',
-  async ({ email, name, password }: TRegisterData) => {
-    const data = await registerUserApi({ email, name, password });
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    return data.user;
-  }
-);
-
-export const logoutUser = createAsyncThunk(
-  'user/logoutUser',
-  async () =>
-    await logoutApi().then(() => {
-      localStorage.clear();
-    })
-);
-
-export const updateUser = createAsyncThunk(
-  'user/updateUser',
-  async (data: TRegisterData) => await updateUserApi(data)
-);
 
 const userSlice = createSlice({
   name: 'user',
@@ -147,5 +105,5 @@ export const {
   selectIsAuthenticated,
   selectUserLoginError
 } = userSlice.selectors;
-// export const { logout } = userSlice.actions;
+
 export default userSlice.reducer;

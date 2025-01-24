@@ -5,9 +5,9 @@ import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   clearFeed,
-  getFeed,
   selectFeed
 } from '../../services/slices/feedSlice/feedSlice';
+import { getFeed } from '../../services/slices/feedSlice/feed-thunk';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();

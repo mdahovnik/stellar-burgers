@@ -14,15 +14,33 @@ const initialState = {
 };
 
 describe('rootReducer test', () => {
-  it('should combine the states of reducers', () => {
-    const action = { type: 'UNKNOWN_ACTION' };
+  it('should initialize correctly', () => {
+    const state = store.getState();
+    expect(state).toEqual(initialState);
+  });
+
+  it('should remains unchanged after dispatching an unknownAction type', () => {
+    const action = { type: 'unknownAction' };
     const state = rootReducer(initialState, action);
     expect(state).toEqual(initialState);
   });
 
-  it('should initialize the initialState correctl', () => {
+  it('should update states ', () => {
+    const action = {
+      type: 'burger/addIngredient',
+      payload: {
+        type: 'bun',
+        name: 'Bun1'
+      }
+    };
+
+    const expectedState = {
+      bun: { name: 'Bun1', type: 'bun' },
+      ingredients: []
+    };
+
+    store.dispatch(action);
     const state = store.getState();
-    expect(state).toEqual(initialState);
+    expect(state.burger).toEqual(expectedState);
   });
 });
-q

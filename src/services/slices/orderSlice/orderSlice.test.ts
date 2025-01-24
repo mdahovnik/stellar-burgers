@@ -1,14 +1,8 @@
-import {
-  clearOrderData,
-  clearOrders,
-  getOrderByNumber,
-  getOrders,
-  orderBurger,
-  selectGetOrderData
-} from './orderSlice';
+import { clearOrderData, clearOrders, selectGetOrderData } from './orderSlice';
 import orderBurgerReducer from './orderSlice';
 import { TOrderState } from './type';
 import store, { RootState } from '../../store';
+import { getOrderByNumber, getOrders, orderBurger } from './order-thunk';
 
 describe('orderSlice test', () => {
   const initialState: TOrderState = {
