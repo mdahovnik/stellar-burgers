@@ -35,7 +35,7 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, { error }) => {
         state.isAuthChecked = true;
         state.isLoading = false;
-        state.error = error.message || 'Failed to login user';
+        state.error = error.message;
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.user = payload.user;
@@ -58,7 +58,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, { error }) => {
-        state.error = error.message || 'Failed to register user';
+        state.error = error.message;
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.isAuthChecked = true;
@@ -75,7 +75,7 @@ const userSlice = createSlice({
       })
       .addCase(getUser.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = error.message || 'Failed to fetch user data';
+        state.error = error.message;
       })
       .addCase(getUser.fulfilled, (state, { payload }) => {
         state.user = payload.user;
@@ -93,7 +93,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = error.message || 'Failed to update user data';
+        state.error = error.message;
       })
       .addCase(updateUser.fulfilled, (state, { payload }) => {
         state.user = payload.user;
@@ -102,7 +102,22 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       });
+  },
+  selectors: {
+    selectIsAuthChecked: (state) => state.isAuthChecked,
+    selectIsAuthenticated: (state) => state.isAuthenticated,
+    selectUser: (state) => state.user,
+    selectIsLoading: (state) => state.isLoading,
+    selectUserLoginError: (state) => state.error
   }
 });
+
+export const {
+  selectIsAuthChecked,
+  selectIsAuthenticated,
+  selectUser,
+  selectIsLoading,
+  selectUserLoginError
+} = userSlice.selectors;
 
 export default userSlice.reducer;

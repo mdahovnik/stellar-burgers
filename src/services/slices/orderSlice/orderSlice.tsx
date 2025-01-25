@@ -1,6 +1,7 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { TOrderState } from './type';
-import { getOrderByNumber, getOrders, orderBurger } from './order-thunk';
+import { getOrderByNumber, getOrders, placeOrder } from './order-thunk';
+import { RootState } from '../../store/store';
 
 export const initialState: TOrderState = {
   orderRequest: false,
@@ -24,15 +25,15 @@ const orderSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<TOrderState>) => {
     // Creating a new order
     builder
-      .addCase(orderBurger.pending, (state) => {
+      .addCase(placeOrder.pending, (state) => {
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(orderBurger.rejected, (state, { error }) => {
+      .addCase(placeOrder.rejected, (state, { error }) => {
         state.orderRequest = false;
-        state.error = error.message || 'Failed to place order';
+        state.error = error.message;
       })
-      .addCase(orderBurger.fulfilled, (state, { payload }) => {
+      .addCase(placeOrder.fulfilled, (state, { payload }) => {
         state.name = payload.name;
         state.orderData = payload.order;
         state.orderRequest = false;
@@ -44,7 +45,7 @@ const orderSlice = createSlice({
         state.error = null;
       })
       .addCase(getOrders.rejected, (state, { error }) => {
-        state.error = error.message || 'Failed to fetch orders';
+        state.error = error.message;
       })
       .addCase(getOrders.fulfilled, (state, { payload }) => {
         state.orders = payload;
@@ -58,14 +59,45 @@ const orderSlice = createSlice({
       })
       .addCase(getOrderByNumber.rejected, (state, { error }) => {
         state.orderRequest = false;
-        state.error = error.message || 'Failed to fetch order by number';
+        state.error = error.message;
       })
       .addCase(getOrderByNumber.fulfilled, (state, { payload }) => {
         state.orderData = payload.orders[0];
         state.orderRequest = false;
       });
+  },
+  selectors: {
+    selectOrderRequest: (state) => state.orderRequest,
+    selectOrders: (state) => state.orders,
+    selectOrderData: (state) => state.orderData
   }
 });
 
+/**
+ * Select a specific order by its number from the store.
+ * @param number - The order number to search for.
+ */
+export const selectGetOrderData =
+  (number: string) =>
+  ({ order, feed }: RootState) => {
+    if (order.orders.length) {
+      const data = order.orders.find((item) => item.number === Number(number));
+      if (data) return data;
+    }
+
+    if (feed.orders.length) {
+      const data = feed.orders.find((item) => item.number === Number(number));
+      if (data) return data;
+    }
+
+    if (order.orderData?.number === Number(number)) {
+      return order.orderData;
+    }
+
+    return null;
+  };
+
+export const { selectOrderRequest, selectOrders, selectOrderData } =
+  orderSlice.selectors;
 export const { clearOrderData, clearOrders } = orderSlice.actions;
 export default orderSlice.reducer;

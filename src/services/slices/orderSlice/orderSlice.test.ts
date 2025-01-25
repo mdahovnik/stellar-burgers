@@ -1,8 +1,12 @@
-import { clearOrderData, clearOrders, initialState } from './orderSlice';
+import {
+  clearOrderData,
+  clearOrders,
+  initialState,
+  selectGetOrderData
+} from './orderSlice';
 import orderBurgerReducer from './orderSlice';
 import store, { RootState } from '../../store/store';
-import { getOrderByNumber, getOrders, orderBurger } from './order-thunk';
-import { selectGetOrderData } from '../../store/selectors';
+import { getOrderByNumber, getOrders, placeOrder } from './order-thunk';
 
 describe('orderSlice test', () => {
   const testOrder_1 = {
@@ -61,7 +65,7 @@ describe('orderSlice test', () => {
     it('should handle pending action', () => {
       const newState = orderBurgerReducer(
         initialState,
-        orderBurger.pending('', [''])
+        placeOrder.pending('', [''])
       );
       expect(newState).toEqual({
         ...initialState,
@@ -78,7 +82,7 @@ describe('orderSlice test', () => {
 
       const newState = orderBurgerReducer(
         actualState,
-        orderBurger.rejected(error, '', [''])
+        placeOrder.rejected(error, '', [''])
       );
       expect(newState).toEqual({
         ...initialState,
@@ -102,7 +106,7 @@ describe('orderSlice test', () => {
 
       const newState = orderBurgerReducer(
         actualState,
-        orderBurger.fulfilled(orderBurgerResponse, '', [''])
+        placeOrder.fulfilled(orderBurgerResponse, '', [''])
       );
 
       expect(newState).toEqual({

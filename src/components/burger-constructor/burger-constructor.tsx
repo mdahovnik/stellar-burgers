@@ -6,14 +6,14 @@ import {
   clearConstructorData,
   selectConstructorItems
 } from '../../services/slices/constructorSlice/constructorSlice';
+import { useNavigate } from 'react-router-dom';
+import { placeOrder } from '../../services/slices/orderSlice/order-thunk';
 import {
+  clearOrderData,
   selectOrderData,
   selectOrderRequest
-} from '../../services/store/selectors';
-import { useNavigate } from 'react-router-dom';
-import { selectIsAuthenticated } from '../../services/store/selectors';
-import { orderBurger } from '../../services/slices/orderSlice/order-thunk';
-import { clearOrderData } from '../../services/slices/orderSlice/orderSlice';
+} from '../../services/slices/orderSlice/orderSlice';
+import { selectIsAuthenticated } from '../../services/slices/userSlice/userSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export const BurgerConstructor: FC = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
 
-  const data = () => {
+  const orderData = () => {
     if (!constructorItems.bun) return [''];
     return [
       constructorItems.bun._id,
@@ -39,7 +39,7 @@ export const BurgerConstructor: FC = () => {
       return;
     }
     if (!constructorItems.bun || orderRequest) return;
-    dispatch(orderBurger(data()));
+    dispatch(placeOrder(orderData()));
   };
 
   const closeOrderModal = () => {

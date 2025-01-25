@@ -6,6 +6,7 @@ import {
 import { TIngredient } from '@utils-types';
 import { TIngredientsState } from './type';
 import { getIngredients } from './ingredients-thunk';
+import { RootState } from '../../store/store';
 
 export const initialState: TIngredientsState = {
   isLoading: false,
@@ -34,7 +35,18 @@ const ingredientsSlice = createSlice({
           state.isLoading = false;
         }
       );
+  },
+  selectors: {
+    selectIsIngredientsLoading: (state) => state.isLoading,
+    selectIngredients: (state) => state.ingredients
   }
 });
 
+export const selectIngredientsById =
+  (id: string | undefined) =>
+  ({ ingredients }: RootState) =>
+    ingredients.ingredients.find((item) => item._id === id);
+
+export const { selectIsIngredientsLoading, selectIngredients } =
+  ingredientsSlice.selectors;
 export default ingredientsSlice.reducer;

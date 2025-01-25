@@ -29,7 +29,7 @@ const feedSlice = createSlice({
       })
       .addCase(getFeed.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = error.message || 'Failed to fetch feed';
+        state.error = error.message;
       })
       .addCase(
         getFeed.fulfilled,
@@ -41,8 +41,12 @@ const feedSlice = createSlice({
           state.error = null;
         }
       );
+  },
+  selectors: {
+    selectFeed: (state) => state
   }
 });
 
+export const { selectFeed } = feedSlice.selectors;
 export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;

@@ -3,8 +3,10 @@ import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store/store';
 import { getOrders } from '../../services/slices/orderSlice/order-thunk';
-import { clearOrders } from '../../services/slices/orderSlice/orderSlice';
-import { selectOrders } from '../../services/store/selectors';
+import {
+  clearOrders,
+  selectOrders
+} from '../../services/slices/orderSlice/orderSlice';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
