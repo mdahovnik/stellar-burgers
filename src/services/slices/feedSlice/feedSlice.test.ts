@@ -1,17 +1,8 @@
-import feedReducer, { clearFeed } from './feedSlice';
-import { TFeedState } from './type';
+import feedReducer, { clearFeed, initialState } from './feedSlice';
 import { TOrder } from '@utils-types';
 import { getFeed } from './feed-thunk';
 
 describe('feedSlice testing', () => {
-  const initialState: TFeedState = {
-    isLoading: false,
-    error: null,
-    orders: [],
-    total: 0,
-    totalToday: 0
-  };
-
   test('should handle when pending is dispatched', () => {
     const newState = feedReducer(initialState, getFeed.pending(''));
 

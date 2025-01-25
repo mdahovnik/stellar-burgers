@@ -3,7 +3,7 @@ import { initialState as constructorReducer } from './slices/constructorSlice/co
 import { initialState as feedReducer } from './slices/feedSlice/feedSlice';
 import { initialState as userReducer } from './slices/userSlice/userSlice';
 import { initialState as orderReducer } from './slices/orderSlice/orderSlice';
-import store, { rootReducer } from './store';
+import store from './store';
 
 const initialState = {
   ingredients: ingredientReducer,
@@ -21,7 +21,8 @@ describe('rootReducer test', () => {
 
   it('should remains unchanged after dispatching an unknownAction type', () => {
     const action = { type: 'unknownAction' };
-    const state = rootReducer(initialState, action);
+    store.dispatch(action);
+    const state = store.getState();
     expect(state).toEqual(initialState);
   });
 

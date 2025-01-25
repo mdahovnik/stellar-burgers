@@ -7,6 +7,7 @@ import {
   registerUser,
   updateUser
 } from './user-thunk';
+import { RootState } from '../../store';
 
 export const initialState: TUserState = {
   isAuthChecked: true,
@@ -25,14 +26,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
-  selectors: {
-    selectIsAuthChecked: (state) => state.isAuthChecked,
-    selectIsAuthenticated: (state) => state.isAuthenticated,
-    selectUser: (state) => state.user,
-    selectIsLoading: (state) => state.isLoading,
-    selectUserLoginError: (state) => state.error
-  },
   extraReducers: (builder: ActionReducerMapBuilder<TUserState>) => {
+    // Authentication (login, logout)
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -40,70 +35,82 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, { error }) => {
         state.isAuthChecked = true;
-        state.error = error.message;
+        state.isLoading = false;
+        state.error = error.message || 'Failed to login user';
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.user = payload.user;
-        state.isLoading = false;
-        state.error = null;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
+        state.isLoading = false;
+        state.error = null;
       })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isAuthChecked = true;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.error = null;
+      });
+
+    // Registration
+    builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.error = action.error.message;
+      .addCase(registerUser.rejected, (state, { error }) => {
+        state.error = error.message || 'Failed to register user';
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.isAuthChecked = true;
         state.isAuthenticated = true;
         state.isLoading = false;
         state.user = payload;
-      })
+      });
+
+    // Fetching User
+    builder
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(getUser.rejected, (state, { error }) => {
-        state.error = error.message;
         state.isLoading = false;
+        state.error = error.message || 'Failed to fetch user data';
       })
       .addCase(getUser.fulfilled, (state, { payload }) => {
-        state.isAuthChecked = true;
+        state.user = payload.user;
         state.isAuthenticated = true;
+        state.isAuthChecked = true;
         state.isLoading = false;
         state.error = null;
-        state.user = payload.user;
-      })
+      });
+
+    // Updating User
+    builder
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, { error }) => {
-        state.error = error.message;
         state.isLoading = false;
+        state.error = error.message || 'Failed to update user data';
       })
       .addCase(updateUser.fulfilled, (state, { payload }) => {
-        state.isAuthChecked = true;
-        state.isAuthenticated = true;
         state.user = payload.user;
-        state.isLoading = false;
-      })
-      .addCase(logoutUser.fulfilled, (state) => {
+        state.isAuthenticated = true;
         state.isAuthChecked = true;
-        state.isAuthenticated = false;
-        state.user = null;
+        state.isLoading = false;
+        state.error = null;
       });
   }
 });
 
-export const {
-  selectIsAuthChecked,
-  selectUser,
-  selectIsAuthenticated,
-  selectUserLoginError
-} = userSlice.selectors;
+export const selectIsAuthChecked = ({ user }: RootState) => user.isAuthChecked;
+export const selectIsAuthenticated = ({ user }: RootState) =>
+  user.isAuthenticated;
+export const selectUser = ({ user }: RootState) => user.user;
+export const selectIsLoading = ({ user }: RootState) => user.isLoading;
+export const selectUserLoginError = ({ user }: RootState) => user.error;
 
 export default userSlice.reducer;

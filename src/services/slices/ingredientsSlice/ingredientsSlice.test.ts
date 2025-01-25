@@ -1,13 +1,7 @@
-import ingredientsReducer from './ingredientsSlice';
+import ingredientsReducer, { initialState } from './ingredientsSlice';
 import { getIngredients } from './ingredients-thunk';
 
 describe('ingredientSlice test', () => {
-  const initialState = {
-    isLoading: false,
-    error: null,
-    ingredients: []
-  };
-
   test('should handle when pending is dispatched', () => {
     const state = ingredientsReducer(initialState, getIngredients.pending(''));
 

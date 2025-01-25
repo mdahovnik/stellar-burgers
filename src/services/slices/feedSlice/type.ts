@@ -1,4 +1,4 @@
-import { TOrder, TOrdersData } from '@utils-types';
+import { TOrder } from '@utils-types';
 
 export type TFeedState = {
   isLoading: boolean;

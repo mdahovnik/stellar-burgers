@@ -18,10 +18,6 @@ const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  selectors: {
-    selectIsIngredientsLoading: (state) => state.isLoading,
-    selectIngredients: (state) => state.ingredients
-  },
   extraReducers: (builder: ActionReducerMapBuilder<TIngredientsState>) => {
     builder
       .addCase(getIngredients.pending, (state) => {
@@ -42,9 +38,10 @@ const ingredientsSlice = createSlice({
   }
 });
 
-export const { selectIngredients, selectIsIngredientsLoading } =
-  ingredientsSlice.selectors;
-
+export const selectIsIngredientsLoading = ({ ingredients }: RootState) =>
+  ingredients.isLoading;
+export const selectIngredients = ({ ingredients }: RootState) =>
+  ingredients.ingredients;
 export const selectIngredientsById = (id: string) => (state: RootState) =>
   state.ingredients.ingredients.find((item) => item._id === id);
 

@@ -1,6 +1,5 @@
-import { TUserState } from './type';
-import userReducer from './userSlice';
-import { loginUserApi, TRegisterData } from '@api';
+import userReducer, { initialState } from './userSlice';
+import { TRegisterData } from '@api';
 import {
   getUser,
   loginUser,
@@ -17,19 +16,6 @@ describe('userSlice test', () => {
     user: {
       email: 'test@test.com',
       name: 'testName'
-    }
-  };
-
-  const initialState: TUserState = {
-    isAuthChecked: true,
-    isAuthenticated: false,
-    error: null,
-    isLoading: false,
-    user: null,
-    registerData: {
-      email: '',
-      name: '',
-      password: ''
     }
   };
 

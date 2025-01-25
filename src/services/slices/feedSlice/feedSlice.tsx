@@ -6,6 +6,7 @@ import {
 import { TOrdersData } from '@utils-types';
 import { TFeedState } from './type';
 import { getFeed } from './feed-thunk';
+import { RootState } from '../../store';
 
 export const initialState: TFeedState = {
   isLoading: false,
@@ -21,9 +22,6 @@ const feedSlice = createSlice({
   reducers: {
     clearFeed: () => initialState
   },
-  selectors: {
-    selectFeed: (state: TFeedState) => state
-  },
   extraReducers: (builder: ActionReducerMapBuilder<TFeedState>) => {
     builder
       .addCase(getFeed.pending, (state) => {
@@ -32,7 +30,7 @@ const feedSlice = createSlice({
       })
       .addCase(getFeed.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = error.message;
+        state.error = error.message || 'Failed to fetch feed';
       })
       .addCase(
         getFeed.fulfilled,
@@ -47,6 +45,6 @@ const feedSlice = createSlice({
   }
 });
 
-export const { selectFeed } = feedSlice.selectors;
+export const selectFeed = ({ feed }: RootState) => feed;
 export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;

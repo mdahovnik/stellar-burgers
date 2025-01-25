@@ -1,8 +1,7 @@
 describe('add ingredients to constructor', function () {
   beforeEach(function () {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-    cy.viewport(1300, 800);
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
   });
 
   it('should add bun ', () => {
@@ -34,8 +33,7 @@ describe('add ingredients to constructor', function () {
 describe('ingredient details modal test', function () {
   beforeEach(function () {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-    cy.viewport(1300, 800);
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
   });
 
   it('should open modal', () => {
@@ -78,8 +76,7 @@ describe('order modal test', function () {
       JSON.stringify('test-accessToken')
     );
 
-    cy.viewport(1300, 800);
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
   });
 
   afterEach(function () {

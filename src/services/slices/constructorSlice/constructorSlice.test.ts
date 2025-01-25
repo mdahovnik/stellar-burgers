@@ -3,6 +3,7 @@ import { TConstructorState } from './type';
 import constructorReducer, {
   addIngredient,
   clearConstructorData,
+  initialState,
   removeIngredient,
   reorderIngredients
 } from './constructorSlice';
@@ -54,7 +55,6 @@ describe('constructorSlice testing', () => {
   };
 
   test('should handle add ingredient', () => {
-    const initialState: TConstructorState = { bun: null, ingredients: [] };
     const newState = constructorReducer(
       initialState,
       addIngredient(ingredient_1)
@@ -68,7 +68,6 @@ describe('constructorSlice testing', () => {
   });
 
   test('should handle add bun', () => {
-    const initialState: TConstructorState = { bun: null, ingredients: [] };
     const newState = constructorReducer(initialState, addIngredient(bun));
 
     expect(newState.bun).toEqual({
