@@ -1,5 +1,4 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../../store';
 import { TOrderState } from './type';
 import { getOrderByNumber, getOrders, orderBurger } from './order-thunk';
 
@@ -67,38 +66,6 @@ const orderSlice = createSlice({
       });
   }
 });
-
-/**
- * Select a specific order by its number from the store.
- * @param number - The order number to search for.
- */
-export const selectGetOrderData =
-  (number: string) =>
-  ({ order, feed }: RootState) => {
-    if (order.orders.length) {
-      const data = order.orders.find((item) => item.number === Number(number));
-      if (data) return data;
-    }
-
-    const orderData = order.orders.find(
-      (item) => item.number === Number(number)
-    );
-    if (orderData) return orderData;
-
-    if (feed.orders.length) {
-      const data = feed.orders.find((item) => item.number === Number(number));
-      if (data) return data;
-    }
-
-    if (order.orderData?.number === Number(number)) {
-      return order.orderData;
-    }
-
-    return null;
-  };
-export const selectOrderRequest = ({ order }: RootState) => order.orderRequest;
-export const selectOrders = ({ order }: RootState) => order.orders;
-export const selectOrderData = ({ order }: RootState) => order.orderData;
 
 export const { clearOrderData, clearOrders } = orderSlice.actions;
 export default orderSlice.reducer;

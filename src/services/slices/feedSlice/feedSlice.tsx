@@ -6,7 +6,6 @@ import {
 import { TOrdersData } from '@utils-types';
 import { TFeedState } from './type';
 import { getFeed } from './feed-thunk';
-import { RootState } from '../../store';
 
 export const initialState: TFeedState = {
   isLoading: false,
@@ -45,6 +44,5 @@ const feedSlice = createSlice({
   }
 });
 
-export const selectFeed = ({ feed }: RootState) => feed;
 export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;

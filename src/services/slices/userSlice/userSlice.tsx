@@ -7,7 +7,6 @@ import {
   registerUser,
   updateUser
 } from './user-thunk';
-import { RootState } from '../../store';
 
 export const initialState: TUserState = {
   isAuthChecked: true,
@@ -105,12 +104,5 @@ const userSlice = createSlice({
       });
   }
 });
-
-export const selectIsAuthChecked = ({ user }: RootState) => user.isAuthChecked;
-export const selectIsAuthenticated = ({ user }: RootState) =>
-  user.isAuthenticated;
-export const selectUser = ({ user }: RootState) => user.user;
-export const selectIsLoading = ({ user }: RootState) => user.isLoading;
-export const selectUserLoginError = ({ user }: RootState) => user.error;
 
 export default userSlice.reducer;

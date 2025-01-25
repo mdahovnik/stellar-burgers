@@ -1,8 +1,8 @@
-import { initialState as ingredientReducer } from './slices/ingredientsSlice/ingredientsSlice';
-import { initialState as constructorReducer } from './slices/constructorSlice/constructorSlice';
-import { initialState as feedReducer } from './slices/feedSlice/feedSlice';
-import { initialState as userReducer } from './slices/userSlice/userSlice';
-import { initialState as orderReducer } from './slices/orderSlice/orderSlice';
+import { initialState as ingredientReducer } from '../slices/ingredientsSlice/ingredientsSlice';
+import { initialState as constructorReducer } from '../slices/constructorSlice/constructorSlice';
+import { initialState as feedReducer } from '../slices/feedSlice/feedSlice';
+import { initialState as userReducer } from '../slices/userSlice/userSlice';
+import { initialState as orderReducer } from '../slices/orderSlice/orderSlice';
 import store from './store';
 
 const initialState = {

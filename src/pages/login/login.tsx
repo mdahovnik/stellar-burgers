@@ -1,8 +1,8 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
-import { useDispatch, useSelector } from '../../services/store';
-import { selectUserLoginError } from '../../services/slices/userSlice/userSlice';
+import { useDispatch, useSelector } from '../../services/store/store';
 import { loginUser } from '../../services/slices/userSlice/user-thunk';
+import { selectUserLoginError } from '../../services/store/selectors';
 
 export const Login: FC = () => {
   const dispatch = useDispatch();

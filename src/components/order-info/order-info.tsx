@@ -2,10 +2,12 @@ import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '@ui';
 import { OrderInfoUI } from '@ui';
 import { TIngredient } from '@utils-types';
-import { useDispatch, useSelector } from '../../services/store';
-import { selectIngredients } from '../../services/slices/ingredientsSlice/ingredientsSlice';
+import { useDispatch, useSelector } from '../../services/store/store';
+import {
+  selectIngredients,
+  selectGetOrderData
+} from '../../services/store/selectors';
 import { useParams } from 'react-router-dom';
-import { selectGetOrderData } from '../../services/slices/orderSlice/orderSlice';
 import { getOrderByNumber } from '../../services/slices/orderSlice/order-thunk';
 
 export const OrderInfo: FC = () => {

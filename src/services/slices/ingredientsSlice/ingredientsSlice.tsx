@@ -4,7 +4,6 @@ import {
   PayloadAction
 } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
-import { RootState } from '../../store';
 import { TIngredientsState } from './type';
 import { getIngredients } from './ingredients-thunk';
 
@@ -37,12 +36,5 @@ const ingredientsSlice = createSlice({
       );
   }
 });
-
-export const selectIsIngredientsLoading = ({ ingredients }: RootState) =>
-  ingredients.isLoading;
-export const selectIngredients = ({ ingredients }: RootState) =>
-  ingredients.ingredients;
-export const selectIngredientsById = (id: string) => (state: RootState) =>
-  state.ingredients.ingredients.find((item) => item._id === id);
 
 export default ingredientsSlice.reducer;
