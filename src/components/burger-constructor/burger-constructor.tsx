@@ -1,19 +1,19 @@
 import { FC, useMemo } from 'react';
 import { TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useDispatch, useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store/store';
 import {
   clearConstructorData,
   selectConstructorItems
-} from '../../services/slices/constructorSlice';
-import {
-  orderBurger,
-  selectOrderData,
-  selectOrderRequest,
-  clearOrderData
-} from '../../services/slices/orderSlice';
+} from '../../services/slices/constructorSlice/constructorSlice';
 import { useNavigate } from 'react-router-dom';
-import { selectIsAuthenticated } from '../../services/slices/userSlice';
+import { placeOrder } from '../../services/slices/orderSlice/order-thunk';
+import {
+  clearOrderData,
+  selectOrderData,
+  selectOrderRequest
+} from '../../services/slices/orderSlice/orderSlice';
+import { selectIsAuthenticated } from '../../services/slices/userSlice/userSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export const BurgerConstructor: FC = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
 
-  const data = () => {
+  const orderData = () => {
     if (!constructorItems.bun) return [''];
     return [
       constructorItems.bun._id,
@@ -35,11 +35,11 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!isAuthenticated) {
-      navigate('/profile');
+      navigate('/login', { replace: true });
       return;
     }
     if (!constructorItems.bun || orderRequest) return;
-    dispatch(orderBurger(data()));
+    dispatch(placeOrder(orderData()));
   };
 
   const closeOrderModal = () => {

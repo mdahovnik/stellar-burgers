@@ -8,7 +8,6 @@ import { Preloader } from '../preloader';
 
 export const OrdersListUI: FC<OrdersListUIProps> = ({ orderByDate }) => (
   <>
-    {/*{!orderByDate.length && <Preloader />}*/}
     {orderByDate && (
       <div className={`${styles.content}`}>
         {orderByDate.map((order) => (
